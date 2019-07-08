@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-app-intro-slider/AppIntroSlider.js b/node_modules/react-native-app-intro-slider/AppIntroSlider.js
+index f1fe018..bd9f21f 100644
+--- a/node_modules/react-native-app-intro-slider/AppIntroSlider.js
++++ b/node_modules/react-native-app-intro-slider/AppIntroSlider.js
+@@ -12,7 +12,7 @@ import {
+ } from 'react-native';
+ import DefaultSlide from './DefaultSlide';
+ 
+-const { width, height } = Dimensions.get('window');
++const { width, height } = Dimensions.get('screen');
+ 
+ const isIphoneX =
+   Platform.OS === 'ios' && !Platform.isPad && !Platform.isTVOS && (height === 812 || width === 812);

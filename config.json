@@ -1,0 +1,19 @@
+{
+  "appInfo": {
+    "disclaimer": "meuParlamento.pt is a mobile application that allows users to vote on legislation that has been presented in the Portuguese Parliament. \n\nUsers will be presented 10 votes, and after casting their opinion, the application will show the parties that had the most similar opinion. \nAdditionally, users will be able to obtain contextual information such news related to the proposals, their authors and the document itself.\n\nAll the data used in the application is obtained from Arquivo.pt, an archive of Portuguese web pages published since 1996. \n\nOur objective is to inform and attempt to approximate voters and democratic institutions. Our objective does not include serving as any sort of advice or suggestion to users concerning how they should vote in any election. This application does not require any type of subscription or registration.\n\nInformation concerning how the users vote any legislative proposal is not stored in any central repository or in the application itself."
+  },
+  "api": {
+    "proposals": {
+      "url": ""
+    },
+    "news": {
+      "url": ""
+    },
+    "authors": {
+      "url": ""
+    },
+    "notifications": {
+      "url": ""
+    }
+  }
+}
