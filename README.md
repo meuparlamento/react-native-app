@@ -26,7 +26,7 @@ $ yarn install
 ## Configuration
 In this repository you can find a [`config.json`](https://github.com/meuparlamento/react-native-app/blob/master/config.json) file that have to be fulfilled with the [backend-api](https://github.com/meuparlamento/meuparlamento-backend-api) endpoints url:
 ```json
-	{
+{
   "api": {
     "proposals": {
       "url": "http://backend-url/batch"
@@ -86,7 +86,7 @@ Distributed under the GPL license. See ``LICENSE`` for more information.
 
 ## Contributing
 
-1. Fork it (<https://github.com/meuparlamento/meuparlamento-backend-api/fork>)
+1. Fork it (<https://github.com/meuparlamento/react-native-app/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
