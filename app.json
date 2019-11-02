@@ -11,7 +11,7 @@
     },
     "version": "1.3.0",
     "slug": "o-meu-parlamento",
-    "sdkVersion": "33.0.0",
+    "sdkVersion": "35.0.0",
     "ios": {
       "bundleIdentifier": "pt.meuparlamento.meuparlamento",
       "supportsTablet": false,
@@ -26,6 +26,9 @@
       "icon": "./src/assets/notification-icon.png",
       "color": "#8096f6"
     },
-    "platforms": ["android", "ios"]
+    "platforms": [
+      "android",
+      "ios"
+    ]
   }
 }
