@@ -1,7 +1,8 @@
 import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View, Text, Image, StatusBar, Dimensions } from 'react-native';
-import { LinearGradient, Font } from 'expo';
+import * as Font from 'expo-font';
+import { LinearGradient } from 'expo-linear-gradient';
 import AppIntroSlider from 'react-native-app-intro-slider';
 
 import RF from 'react-native-responsive-fontsize';

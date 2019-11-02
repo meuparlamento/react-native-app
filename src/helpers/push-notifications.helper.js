@@ -1,4 +1,6 @@
-import { Permissions, Notifications } from 'expo';
+import { Notifications } from 'expo';
+
+import * as Permissions from 'expo-permissions';
 
 const config = require('../../config.json');
 

@@ -13,7 +13,9 @@ import {
 import Image from 'react-native-remote-svg';
 import ProgressBar from 'react-native-progress/Bar';
 
-import { Font, AppLoading, Asset } from 'expo';
+import { AppLoading } from 'expo';
+import { Asset } from 'expo-asset';
+import * as Font from 'expo-font';
 import RF from 'react-native-responsive-fontsize';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 // import { FluidNavigator } from 'react-navigation-fluid-transitions';
