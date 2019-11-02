@@ -1,4 +1,4 @@
-export const fetchCardData = async (url) => {
+export default fetchCardData = async (url) => {
     try {
       const headers = new Headers();
       headers.append('Accept', 'application/json');

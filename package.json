@@ -1,5 +1,5 @@
 {
-  "name": "tinder-ui-clone",
+  "name": "meuparlamento",
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
@@ -29,7 +29,8 @@
     "ios:old": "react-native run-ios --simulator=\"iPhone 6s (11.4)\"",
     "ios:x": "react-native run-ios --simulator=\"iPhone X\"",
     "postinstall": "patch-package",
-    "format": "prettier --write \"./**/*.{js,jsx,json}\""
+    "format": "prettier --write \"./**/*.{js,jsx,json}\"",
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001' && expo start"
   },
   "jest": {
     "preset": "jest-expo"

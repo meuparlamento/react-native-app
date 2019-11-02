@@ -24,13 +24,6 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 const config = require('../../../config.json');
 
 class VotingResultsScreen extends React.Component {
-  componentDidMount() {
-    const { navigation } = this.props;
-    const screenProps = navigation.getParam('screenProps', {});
-    const { reloadCards } = screenProps;
-    reloadCards();
-  }
-
   onShare = topVotes => {
     const shareMessage =
       Platform.OS === 'ios'
@@ -122,7 +115,7 @@ class VotingResultsScreen extends React.Component {
       .slice(0, 3);
   };
 
-  playAgain() {
+  goToHome() {
     const { navigation } = this.props;
     navigation.navigate('Home', { newGame: true });
   }
@@ -151,7 +144,7 @@ class VotingResultsScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const screenProps = navigation.getParam('screenProps', {});
-    const { votes, cards, reloadCards } = screenProps;
+    const { votes, cards } = screenProps;
 
     let data = [
       {
@@ -205,7 +198,7 @@ class VotingResultsScreen extends React.Component {
       },
     ];
 
-    // show olny items with votes
+    // show only items with votes
     data = data.filter(row => row.votes > 0);
 
     const votesArray = Object.keys(votes);
@@ -241,7 +234,7 @@ class VotingResultsScreen extends React.Component {
           />
         </View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.playAgain(reloadCards)}>
+          <TouchableOpacity onPress={() => this.goToHome()}>
             <Text style={styles.btn}>Jogar outra vez</Text>
           </TouchableOpacity>
         </View>
