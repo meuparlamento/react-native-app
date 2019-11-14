@@ -12,10 +12,11 @@ import Image from 'react-native-remote-svg';
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import RF from 'react-native-responsive-fontsize';
+import * as Animatable from "react-native-animatable";
 import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { fromLeft, zoomIn, zoomOut, fromRight } from 'react-navigation-transitions';
+import { zoomIn, zoomOut, fromRight } from 'react-navigation-transitions';
 
 import { registerForPushNotificationsAsync } from './helpers/push-notifications.helper';
 import VotingResults from './components/VotingResults';
@@ -26,6 +27,7 @@ import IntroScreen from './components/IntroScreen';
 import AboutScreen from './components/AboutScreen';
 import CardGameScreen from './components/CardGameScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import RF from 'react-native-responsive-fontsize';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -114,13 +116,12 @@ class AppScreen extends React.Component {
     navigation.navigate('Intro', {screenProps});
   };
 
-  navigateToCardGame = () => {
+  navigateTo = (screen) => {
     const { navigation } = this.props;
-    navigation.navigate('CardGame');
+    navigation.navigate(screen);
   };
 
   render() {
-    console.log(this.state);
     if (!this.state.isAppReady) {
       return (
         <AppLoading
@@ -132,9 +133,21 @@ class AppScreen extends React.Component {
       return (
         <View style={styles.container}>
           <StatusBar barStyle="dark-content" hidden={false} translucent />
-          <TouchableOpacity onPress={() => this.navigateToCardGame()}>
-            <Text>THIS IS THE BEGINNING</Text>
+          <LinearGradient
+          colors={['#aab6f4', '#8396db']}
+          style={styles.gradient}>
+          <View style={styles.menuContainer}>
+          <TouchableOpacity onPress={() => this.navigateTo('CardGame')}>
+            <Animatable.Text animation="slideInDown" style={styles.menuItem}>Votar num novo jogo</Animatable.Text>
           </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.navigateTo('Intro')}>
+          <Animatable.Text animation="slideInDown" style={styles.menuItem}>Como funciona</Animatable.Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.navigateTo('About')}>
+          <Animatable.Text animation="slideInDown" style={styles.menuItem}>Sobre</Animatable.Text>
+          </TouchableOpacity>  
+          </View>
+          </LinearGradient>
         </View>
       );
     }
@@ -224,9 +237,22 @@ export default createAppContainer(AppNavigator);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  gradient: {
+    flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: '#fff',
-    alignItems: 'stretch',
+    alignItems: 'center',
   },
+  menuContainer: {
+    flex: 0.2,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  menuItem: {
+    color: '#ffff',
+    fontFamily: 'AirbnbCerealApp-Bold',
+    fontSize: RF(3.2)
+  }
 });

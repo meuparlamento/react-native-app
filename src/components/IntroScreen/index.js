@@ -13,7 +13,7 @@ class IntroScreen extends Component {
 
   onDone = () => {
     const { navigation } = this.props;
-    navigation.navigate('About');
+    navigation.goBack();
   }
 
   componentDidMount() {

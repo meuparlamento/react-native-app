@@ -23,6 +23,8 @@ import checkIcon from '../../assets/icons8-checkmark-128.png';
 import cancelIcon from '../../assets/icons8-cancel-128.png';
 import skipIcon from '../../assets/icons8-circled-yellow-128.png';
 import newProposalIcon from '../../assets/icons8-synchronize-128.png';
+import * as Animatable from "react-native-animatable";
+
 
 import Card from '../Card';
 import fetchCardData from '../../helpers/api.helper';
@@ -311,12 +313,11 @@ class CardGameScreen extends React.Component {
   };
 
   renderCardGame = () => {
-    console.log(this.state);
     return (
       <React.Fragment>
-        <View style={styles.cardArea}>
+        <Animatable.View animation='zoomInDown' duration={2500} style={styles.cardArea}>
           {this.state.isLoading ? this.renderSpinner() : this.renderCards(this.state.cards)}
-        </View>
+        </Animatable.View>
       { this.gameProgress() >= 0 ? (
         <View style={styles.progressBarContainer}>
         <ProgressBar
@@ -362,18 +363,18 @@ class CardGameScreen extends React.Component {
                     {this.state.newQuestionCredits}
                   </Text>
                 </View>
-                <Image source={newProposalIcon} style={styles.btnIconSmall} />
+                <Animatable.Image animation='zoomIn' source={newProposalIcon} style={styles.btnIconSmall} />
               </TouchableOpacity>
             </View>
             <View style={{ flex: 0.75, flexDirection: 'row', justifyContent: 'flex-start' }}>
               <TouchableOpacity style={styles.btn} onPress={() => this.handleNopeSelect()}>
-                <Image source={cancelIcon} style={styles.btnIcon} />
+                <Animatable.Image animation='zoomIn' source={cancelIcon} style={styles.btnIcon} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.btn} onPress={() => this.handleAbstenceSelect()}>
-                <Image source={skipIcon} style={styles.btnIcon} />
+              <Animatable.Image animation='zoomIn' source={skipIcon} style={styles.btnIcon} />
               </TouchableOpacity>
               <TouchableOpacity style={styles.btn} onPress={() => this.handleLikeSelect()}>
-                <Image source={checkIcon} style={styles.btnIcon} />
+              <Animatable.Image animation='zoomIn' source={checkIcon} style={styles.btnIcon} />
               </TouchableOpacity>
             </View>
           </View>

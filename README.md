@@ -8,7 +8,6 @@ An intuitive mobile app to improve political participation in Portugal.
 
 ### Requirements
 
-* [Yarn](https://yarnpkg.com/lang/en/)
 * [Expo-CLI](https://docs.expo.io/versions/latest/workflow/expo-cli/)
 
 ## Installation
@@ -16,11 +15,11 @@ An intuitive mobile app to improve political participation in Portugal.
 All the dependencies can be installed just running these commands
 
 ```sh
-$ yarn global add expo-cli
+$ npm install -g expo-cli
 ```
 
 ```sh
-$ yarn install
+$ npm install
 ```
 
 ## Configuration
@@ -51,7 +50,7 @@ This project is wrapped on a SDK called [Expo](https://expo.io/) on top of [Reac
 In order to run it locally just type:
 
 ```sh
-yarn start 
+npm start 
 ```
  Then you have multiple options on where to run the App:
  

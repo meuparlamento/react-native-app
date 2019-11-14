@@ -2,11 +2,10 @@ import React from 'react';
 import {
   StyleSheet,
   Text,
-  Image as RNImage,
+  Image,
   Dimensions,
   Animated,
   PanResponder,
-  TouchableOpacity,
 } from 'react-native';
 
 import { material, iOSColors } from 'react-native-typography';
@@ -119,7 +118,7 @@ export default class Card extends React.Component {
   renderProposalContent() {
     return (
       <React.Fragment>
-        <RNImage style={styles.cardImg} source={this.props.image} />
+        <Image style={styles.cardImg} source={this.props.image} />
         <Text style={[material.headlineWhite, styles.materialCardDetailsWhiteTop]}>
           Como votavas?
         </Text>
@@ -136,7 +135,7 @@ export default class Card extends React.Component {
   renderProposalDetails() {
     return (
       <React.Fragment>
-        <RNImage style={styles.cardImg} source={this.props.image} />
+        <Image style={styles.cardImg} source={this.props.image} />
         <Text style={[material.titleWhite, styles.detailsText]}>{this.props.summary}</Text>
       </React.Fragment>
     );
