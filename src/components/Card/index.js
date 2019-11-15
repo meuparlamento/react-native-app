@@ -7,7 +7,7 @@ import {
   Animated,
   PanResponder,
 } from 'react-native';
-
+import { LinearGradient } from 'expo-linear-gradient';
 import { material, iOSColors } from 'react-native-typography';
 import RF from 'react-native-responsive-fontsize';
 
@@ -118,7 +118,9 @@ export default class Card extends React.Component {
   renderProposalContent() {
     return (
       <React.Fragment>
-        <Image style={styles.cardImg} source={this.props.image} />
+        <LinearGradient
+          colors={['#aab6f4', '#8396db']}
+          style={styles.cardBackground}>
         <Text style={[material.headlineWhite, styles.materialCardDetailsWhiteTop]}>
           Como votavas?
         </Text>
@@ -128,6 +130,7 @@ export default class Card extends React.Component {
         <Text style={[material.headlineWhite, styles.materialCardDetailsWhite]}>
           Proposto em {this.props.voteDate.split('-')[0]}
         </Text>
+        </LinearGradient>
       </React.Fragment>
     );
   }
@@ -135,7 +138,7 @@ export default class Card extends React.Component {
   renderProposalDetails() {
     return (
       <React.Fragment>
-        <Image style={styles.cardImg} source={this.props.image} />
+        <Image style={styles.cardBackground} source={this.props.image} />
         <Text style={[material.titleWhite, styles.detailsText]}>{this.props.summary}</Text>
       </React.Fragment>
     );
@@ -196,19 +199,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  moreInfo: {
-    color: iOSColors.white,
-    fontSize: 15,
-    textAlign: 'justify',
-    position: 'absolute',
-    fontFamily: 'AirbnbCerealApp-Bold',
-    left: 280,
-    right: 0,
-    bottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   materialCardDetailsWhiteTop: {
     color: iOSColors.white,
     fontSize: 15,
@@ -252,11 +242,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  cardImg: {
+  cardBackground: {
     borderRadius: 20,
-    height: null,
-    width: null,
-    resizeMode: 'cover',
     flex: 1,
   },
 
