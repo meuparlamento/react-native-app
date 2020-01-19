@@ -249,6 +249,11 @@ class CardGameScreen extends React.Component {
     navigation.navigate('Error', { screenProps });
   }
 
+  goToHome() {
+    const { navigation } = this.props;
+    navigation.navigate('Home', { newGame: true });
+  }
+
   renderSpinner = () => {
     return (
       <View

@@ -8,6 +8,7 @@ import {
   Text,
 } from 'react-native';
 import Image from 'react-native-remote-svg';
+import whiteLogo from './assets/white-logo.png'
 
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
@@ -136,15 +137,16 @@ class AppScreen extends React.Component {
           <LinearGradient
           colors={['#aab6f4', '#8396db']}
           style={styles.gradient}>
+          <Animatable.Image animation="bounceIn" easing="ease-out-sine" source={whiteLogo} style={styles.logo}></Animatable.Image>
           <View style={styles.menuContainer}>
           <TouchableOpacity onPress={() => this.navigateTo('CardGame')}>
-            <Animatable.Text animation="slideInDown" style={styles.menuItem}>Votar num novo jogo</Animatable.Text>
+            <Animatable.Text animation="slideInDown" style={styles.menuItem}>Novo jogo</Animatable.Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.navigateTo('Intro')}>
           <Animatable.Text animation="slideInDown" style={styles.menuItem}>Como funciona</Animatable.Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.navigateTo('About')}>
-          <Animatable.Text animation="slideInDown" style={styles.menuItem}>Sobre</Animatable.Text>
+          <Animatable.Text animation="slideInDown" style={styles.menuItem}>Sobre nós</Animatable.Text>
           </TouchableOpacity>  
           </View>
           </LinearGradient>
@@ -241,11 +243,17 @@ const styles = StyleSheet.create({
   gradient: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
   },
+  logo: {
+    flex: 0.3,
+    width: RF(24),
+    resizeMode: 'contain',
+    marginTop: RF(10)
+  },
   menuContainer: {
-    flex: 0.2,
+    flex: 0.3,
     flexDirection: 'column',
     justifyContent: 'space-around',
     alignItems: 'center',

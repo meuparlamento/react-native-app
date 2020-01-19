@@ -4,9 +4,7 @@ import { SafeAreaView, withNavigation } from 'react-navigation'
 import  Intro  from '../Intro'
 
 class IntroScreen extends Component {
-
-  // onDone = null;
-
+  
   constructor(props){
     super(props);
   }
