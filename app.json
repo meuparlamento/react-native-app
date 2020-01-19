@@ -9,18 +9,18 @@
       "backgroundColor": "#8096f6",
       "resizeMode": "cover"
     },
-    "version": "1.3.0",
+    "version": "1.4.0",
     "slug": "o-meu-parlamento",
     "sdkVersion": "35.0.0",
     "ios": {
       "bundleIdentifier": "pt.meuparlamento.meuparlamento",
       "supportsTablet": false,
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "android": {
       "package": "pt.contamehistorias.omeuparlamento",
       "permissions": [],
-      "versionCode": 3
+      "versionCode": 4
     },
     "notification": {
       "icon": "./src/assets/notification-icon.png",

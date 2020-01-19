@@ -1,6 +1,6 @@
 {
   "name": "meuparlamento",
-  "version": "0.1.0",
+  "version": "1.4.0",
   "private": true,
   "devDependencies": {
     "babel-eslint": "^10.0.2",
@@ -44,6 +44,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "expo": "^35.0.0",
+    "i18n-js": "^3.5.1",
     "moment": "^2.24.0",
     "patch-package": "^6.1.2",
     "postinstall-prepare": "^1.0.1",
