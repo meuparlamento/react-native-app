@@ -72,15 +72,6 @@ export default class Intro extends React.Component {
   );
 
   render() {
-    // return this.state.fontsLoaded ? (
-    //   <AppIntroSlider
-    //     slides={slides}
-    //     renderItem={this._renderItem}
-    //     renderDoneButton={this._renderDoneButton}
-    //     renderNextButton={this._renderNextButton}
-    //     onDone={this.props._onDone}
-    //   />
-    // ) : null;
     return (
       <AppIntroSlider
         slides={slides}
@@ -98,12 +89,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'space-around',
-    // paddingVertical: RF(10),
   },
   image: {
     width: RF(45),
     height: RF(45),
-    // marginBottom: RF(2),
     backgroundColor: 'transparent',
   },
   text: {

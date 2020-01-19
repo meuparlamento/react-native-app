@@ -4,16 +4,14 @@ import { SafeAreaView, withNavigation } from 'react-navigation'
 import  Intro  from '../Intro'
 
 class IntroScreen extends Component {
-
-  // onDone = null;
-
+  
   constructor(props){
     super(props);
   }
 
   onDone = () => {
     const { navigation } = this.props;
-    navigation.navigate('About');
+    navigation.goBack();
   }
 
   componentDidMount() {

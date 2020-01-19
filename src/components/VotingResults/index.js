@@ -22,15 +22,8 @@ import AuthorsScreen from './AuthorsScreen';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const config = require('../../../config.json');
-
+import * as Animatable from 'react-native-animatable';
 class VotingResultsScreen extends React.Component {
-  componentDidMount() {
-    const { navigation } = this.props;
-    const screenProps = navigation.getParam('screenProps', {});
-    const { reloadCards } = screenProps;
-    reloadCards();
-  }
-
   onShare = topVotes => {
     const shareMessage =
       Platform.OS === 'ios'
@@ -61,7 +54,8 @@ class VotingResultsScreen extends React.Component {
         switch (winner) {
           case 'PS':
             return (
-              <Image
+              <Animatable.Image
+                animation='zoomIn'
                 key={i}
                 source={require('../../assets/logos/PS.png')}
                 style={styles.partyLogoImg}
@@ -69,7 +63,8 @@ class VotingResultsScreen extends React.Component {
             );
           case 'PSD':
             return (
-              <Image
+              <Animatable.Image
+                animation='zoomIn'
                 key={i}
                 source={require('../../assets/logos/PSD.png')}
                 style={styles.partyLogoImg}
@@ -85,7 +80,8 @@ class VotingResultsScreen extends React.Component {
             );
           case 'PEV':
             return (
-              <Image
+              <Animatable.Image
+                animation='zoomIn'
                 key={i}
                 source={require('../../assets/logos/PEV.png')}
                 style={styles.partyLogoImg}
@@ -93,7 +89,8 @@ class VotingResultsScreen extends React.Component {
             );
           case 'PCP':
             return (
-              <Image
+              <Animatable.Image
+                animation='zoomIn'
                 key={i}
                 source={require('../../assets/logos/PCP.png')}
                 style={styles.partyLogoImg}
@@ -101,7 +98,8 @@ class VotingResultsScreen extends React.Component {
             );
           case 'CDS_PP':
             return (
-              <Image
+              <Animatable.Image
+                animation='zoomIn'
                 key={i}
                 source={require('../../assets/logos/CDS_PP.png')}
                 style={styles.partyLogoImg}
@@ -109,7 +107,8 @@ class VotingResultsScreen extends React.Component {
             );
           case 'PAN':
             return (
-              <Image
+              <Animatable.Image
+                animation='zoomIn'
                 key={i}
                 source={require('../../assets/logos/PAN.png')}
                 style={styles.partyLogoImg}
@@ -122,7 +121,7 @@ class VotingResultsScreen extends React.Component {
       .slice(0, 3);
   };
 
-  playAgain() {
+  goToHome() {
     const { navigation } = this.props;
     navigation.navigate('Home', { newGame: true });
   }
@@ -135,7 +134,7 @@ class VotingResultsScreen extends React.Component {
   renderAboutButton = () => {
     return (
     <TouchableOpacity style={styles.btnTop} onPress={() => this.goToAbout()}>
-      <Image source={infoIcon} style={styles.btnIcon} />
+      <Animatable.Image animation='zoomIn' source={infoIcon} style={styles.btnIcon} />
     </TouchableOpacity>
     )
   }
@@ -143,7 +142,7 @@ class VotingResultsScreen extends React.Component {
   renderShareButton = (topVotes) => {
     return (
     <TouchableOpacity style={styles.btnTop} onPress={this.onShare(topVotes)}>
-      <Image source={shareIcon} style={styles.btnIcon} />
+      <Animatable.Image animation='zoomIn' source={shareIcon} style={styles.btnIcon} />
     </TouchableOpacity> 
     )
   }
@@ -151,7 +150,7 @@ class VotingResultsScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const screenProps = navigation.getParam('screenProps', {});
-    const { votes, cards, reloadCards } = screenProps;
+    const { votes, cards } = screenProps;
 
     let data = [
       {
@@ -205,7 +204,7 @@ class VotingResultsScreen extends React.Component {
       },
     ];
 
-    // show olny items with votes
+    // show only items with votes
     data = data.filter(row => row.votes > 0);
 
     const votesArray = Object.keys(votes);
@@ -215,34 +214,34 @@ class VotingResultsScreen extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.titleContainer}>
-          <Text style={[{ flex: 0.8 }, styles.containerTitle]}>Resultados</Text>
+          <Animatable.Text animation='slideInRight' style={[{ flex: 0.8 }, styles.containerTitle]}>Resultados</Animatable.Text>
           {this.renderShareButton(topVotes)}
           {this.renderAboutButton()}
         </View>
         <View style={styles.subTitleContainer}>
-          <Text style={styles.containerSubtitle}>Quem votou contigo</Text>
+        <Animatable.Text animation='slideInRight' style={styles.containerSubtitle}>Quem votou contigo</Animatable.Text>
         </View>
         <View style={styles.logoContainer}>
           {topVotes.length === 0 ? (
-            <Text style={styles.noVotesText}>Nenhum partido votou como tu</Text>
+            <Animatable.Text animation='slideInRight' style={styles.noVotesText}>Nenhum partido votou como tu</Animatable.Text>
           ) : (
             this.renderPartyLogos(topVotes)
           )}
         </View>
         <View style={[styles.subTitleContainer, { flex: 0.1, justifyContent: 'center' }]}>
-          <Text style={styles.containerSubtitle}>Os teus votos</Text>
+        <Animatable.Text animation='slideInRight' style={styles.containerSubtitle}>Os teus votos</Animatable.Text>
         </View>
-        <View style={styles.carouselContainer}>
+        <Animatable.View animation='fadeInRight' style={styles.carouselContainer}>
           <VotesCarousel
             navigation={navigation}
             screenWidth={SCREEN_WIDTH}
             screenHeight={SCREEN_HEIGHT}
             cards={cards}
           />
-        </View>
+        </Animatable.View>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => this.playAgain(reloadCards)}>
-            <Text style={styles.btn}>Jogar outra vez</Text>
+          <TouchableOpacity onPress={() => this.goToHome()}>
+            <Animatable.Text animation='slideInUp' style={styles.btn}>Voltar</Animatable.Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>

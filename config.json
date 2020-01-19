@@ -4,16 +4,16 @@
   },
   "api": {
     "proposals": {
-      "url": ""
+      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/proposals/batch"
     },
     "news": {
-      "url": ""
+      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/proposals/news"
     },
     "authors": {
-      "url": ""
+      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/proposals/authors"
     },
     "notifications": {
-      "url": ""
+      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/register_device"
     }
   }
 }
