@@ -1,7 +1,7 @@
 
 # meuParlamento mobile app
 
-![meuParlamentoCover](https://scontent.flis5-1.fna.fbcdn.net/v/t1.0-9/66037340_2128035380641177_3656508476030451712_o.png?_nc_cat=106&_nc_oc=AQntabL12k94L2xmePuGfozVm6TdTS4cfcJ05um62JQioz3SJ_K_oCd0khMS6TQtAzzySgLlFJf8Zs-LPhA__Uki&_nc_ht=scontent.flis5-1.fna&oh=1ecd2b7a5b818790ce06e018d32502a1&oe=5DAB2FA7)
+![meuParlamentoCover](http://meuparlamento.pt/static/readme_header.jpeg)
 > This project provides the mobile app source code to be used with the [backend-api](https://github.com/meuparlamento/meuparlamento-backend-api)
 > 
 An intuitive mobile app to improve political participation in Portugal.
