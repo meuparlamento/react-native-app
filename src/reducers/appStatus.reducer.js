@@ -1,7 +1,7 @@
  
 import { SET_OFFLINE, SET_READY, SET_FIRST_USE } from '../actions/actionTypes';
 const initialState = {
-    firstUse: true,
+    firstUse: false,
     isAppReady: false,
     isOffline: false,
   }
@@ -22,7 +22,7 @@ export default appStatusReducer = (state = initialState, action) => {
         case SET_FIRST_USE:
           return {
             ...state,
-            isAppReady: action.payload,
+            firstUse: action.payload,
           };
         default: 
         return state;

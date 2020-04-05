@@ -1,31 +1,37 @@
-import React, { Component } from 'react'
-import { Text } from 'react-native'
-import { SafeAreaView, withNavigation } from 'react-navigation'
-import  Intro  from '../Intro'
+import React, { Component } from 'react';
+import { withNavigation } from 'react-navigation';
+import  Intro  from '../Intro';
+import { AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from '../../actions';
 
 class IntroScreen extends Component {
   
-  constructor(props){
-    super(props);
-  }
-
-  onDone = () => {
-    const { navigation } = this.props;
-    navigation.goBack();
-  }
-
-  componentDidMount() {
-    const { navigation } = this.props;
-    const screenProps = navigation.getParam('screenProps', {});
-    const { _onDoneIntro } = screenProps;
-    this.onDone = _onDoneIntro || this.onDone;
-  }
+  _onDoneIntro = () => {
+    const { navigation, setAppFirstUse } = this.props;
+    AsyncStorage.setItem('alreadyLaunched', 'true')
+    .then(alreadyLaunched => {
+      console.log(alreadyLaunched);
+      setAppFirstUse(false);
+    });
+    navigation.navigate('Home');
+  };
 
   render() {
     return (
-        <Intro _onDone={this.onDone} />
+        <Intro _onDone={this._onDoneIntro} />
     )
   }
 }
 
-export default withNavigation(IntroScreen);
+const mapStateToProps = store => ({
+  isOffline: store.appStatusReducer.isOffline,
+  firstUse: store.appStatusReducer.firstUse,
+});
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators(actions, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(IntroScreen));
