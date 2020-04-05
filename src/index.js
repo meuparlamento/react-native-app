@@ -2,10 +2,8 @@ import React from 'react';
 import {
   StyleSheet,
   View,
-  Dimensions,
   AsyncStorage,
   StatusBar,
-  Text,
 } from 'react-native';
 import Image from 'react-native-remote-svg';
 import whiteLogo from './assets/white-logo.png'
@@ -14,26 +12,15 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import * as Animatable from "react-native-animatable";
-import { createStackNavigator, createAppContainer } from 'react-navigation';
 import { LinearGradient } from 'expo-linear-gradient';
-
-import { zoomIn, zoomOut, fromRight } from 'react-navigation-transitions';
-
 import { registerForPushNotificationsAsync } from './helpers/push-notifications.helper';
-import VotingResults from './components/VotingResults';
-import DisclaimerScreen from './components/Disclaimer';
-import ErrorScreen from './components/ErrorScreen';
-import SummaryScreen from './components/Summary';
-import IntroScreen from './components/IntroScreen';
-import AboutScreen from './components/AboutScreen';
-import CardGameScreen from './components/CardGameScreen';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RF from 'react-native-responsive-fontsize';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actions from './actions';
 
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-const SCREEN_WIDTH = Dimensions.get('window').width;
-
-class AppScreen extends React.Component {
+class HomeScreen extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -123,6 +110,7 @@ class AppScreen extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     if (!this.state.isAppReady) {
       return (
         <AppLoading
@@ -147,7 +135,10 @@ class AppScreen extends React.Component {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => this.navigateTo('About')}>
           <Animatable.Text animation="slideInDown" style={styles.menuItem}>Sobre nós</Animatable.Text>
-          </TouchableOpacity>  
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.props.setOffline(true)}>
+          <Animatable.Text animation="slideInDown" style={styles.menuItem}>Set Offline</Animatable.Text>
+          </TouchableOpacity>    
           </View>
           </LinearGradient>
         </View>
@@ -155,86 +146,16 @@ class AppScreen extends React.Component {
     }
   }
 }
+const mapStateToProps = store => ({
+  isOffline: store.appStatusReducer.isOffline,
+  isAppReady: store.appStatusReducer.isAppReady
+});
 
-const handleCustomTransition = ({ scenes }) => {
-  const prevScene = scenes[scenes.length - 2];
-  const nextScene = scenes[scenes.length - 1];
+const mapDispatchToProps = dispatch => (
+  bindActionCreators(actions, dispatch)
+)
 
-  // Custom transitions go there
-  if (
-    prevScene &&
-    prevScene.route.routeName === 'CardGame' &&
-    nextScene.route.routeName === 'Summary'
-  ) {
-    return zoomIn();
-  }
-  if (
-    prevScene &&
-    prevScene.route.routeName === 'Summary' &&
-    nextScene.route.routeName === 'CardGame'
-  ) {
-    return zoomOut();
-  }
-  return fromRight();
-};
-
-const AppNavigator = createStackNavigator(
-  {
-    Home: {
-      screen: AppScreen,
-      navigationOptions: {
-        header: null,
-        gesturesEnabled: false,
-      },
-    },
-    CardGame: {
-      screen: CardGameScreen,
-      navigationOptions: {
-        header: null,
-        gesturesEnabled: false,
-      },
-    },
-    Results: {
-      screen: VotingResults,
-      navigationOptions: {
-        header: null,
-        gesturesEnabled: false,
-      },
-    },
-    Disclaimer: {
-      screen: DisclaimerScreen,
-    },
-    Summary: {
-      screen: SummaryScreen,
-      navigationOptions: {
-        header: null,
-      },
-    },
-    Intro: {
-      screen: IntroScreen,
-      navigationOptions: {
-        header: null,
-        gesturesEnabled: false,
-      }
-    },
-    About: {
-      screen: AboutScreen,
-    },
-    Error: {
-      screen: ErrorScreen,
-      navigationOptions: {
-        header: null,
-        gesturesEnabled: false,
-      },
-    },
-    initialRouteName: 'Home',
-  },
-  {
-    transitionConfig: nav => handleCustomTransition(nav),
-  }
-);
-
-export default createAppContainer(AppNavigator);
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {
