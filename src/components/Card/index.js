@@ -66,7 +66,7 @@ export default class Card extends React.Component {
     });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.PanResponder = PanResponder.create({
       onStartShouldSetPanResponder: (evt, gestureState) => {
         this.startPress = evt.timeStamp;
