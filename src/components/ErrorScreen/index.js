@@ -9,8 +9,10 @@ class ErrorScreen extends Component {
   tryAgain(){
     const { navigation } = this.props;
     const screenProps = navigation.getParam('screenProps', {});
-    const { reloadCards } = screenProps;
-    reloadCards();
+    if(screenProps.reloadCards) {
+      const { reloadCards } = screenProps;
+      reloadCards();
+    }
     navigation.navigate('Home');
   }
 

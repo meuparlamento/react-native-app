@@ -11,7 +11,6 @@
     },
     "version": "1.4.0",
     "slug": "o-meu-parlamento",
-    "sdkVersion": "35.0.0",
     "ios": {
       "bundleIdentifier": "pt.meuparlamento.meuparlamento",
       "supportsTablet": false,
@@ -30,5 +29,6 @@
       "android",
       "ios"
     ]
-  }
+  },
+  "name": "meuparlamento"
 }
