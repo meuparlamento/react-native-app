@@ -1,29 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { SafeAreaView } from 'react-navigation';
-import ItemLinkList  from '../ItemsLinkList';
+import ItemLinkList from '../../components/ItemsLinkList';
+
 const config = require('../../../config.json');
 
-export default class NewsScreen extends Component {
+export default class AuthorsScreen extends Component {
   static navigationOptions = {
-    title: 'Notícias',
+    title: 'Autores',
     headerTitleStyle: {
       flex: 0.8,
       textAlign: 'center',
   },
   };
+
     constructor(props) {
       super(props);
       const { navigation } = this.props;
       const proposalId = navigation.getParam('proposalId', 'NO-ID');
-      const proposalDate = navigation.getParam('proposalDate', 'some default value');
       this.state = {
-        newsUrl: `${config.api.news.url}/${proposalId}/${proposalDate}`
+        authorsUrl: `${config.api.authors.url}/${proposalId}`
       }
   }
   render() {
     return (
       <SafeAreaView>
-        <ItemLinkList url={this.state.newsUrl}/>
+        <ItemLinkList url={this.state.authorsUrl}/>
       </SafeAreaView>
     )
   }

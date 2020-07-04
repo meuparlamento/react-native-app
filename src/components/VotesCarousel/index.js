@@ -4,7 +4,7 @@ import Carousel from 'react-native-snap-carousel';
 import { material, iOSColors } from 'react-native-typography';
 import RF from 'react-native-responsive-fontsize';
 
-export class VotesCarousel extends React.Component {
+export default class VotesCarousel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

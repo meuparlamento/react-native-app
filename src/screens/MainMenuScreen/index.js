@@ -12,7 +12,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import RF from 'react-native-responsive-fontsize';
 
 
-export default class MainMenu extends Component {
+export default class MainMenuScreen extends Component {
     render() {
         return (
             <View style={styles.container}>

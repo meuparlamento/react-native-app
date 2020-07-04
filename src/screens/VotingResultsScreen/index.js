@@ -15,13 +15,12 @@ import RF from 'react-native-responsive-fontsize';
 import shareIcon from '../../assets/icons8-share-64.png';
 import infoIcon from '../../assets/icons8-info-52.png';
 
-import { VotesCarousel } from '../VotesCarousel';
+import { VotesCarousel } from '../../components';
 import NewsScreen from './NewsScreen';
 import AuthorsScreen from './AuthorsScreen';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
-const config = require('../../../config.json');
 import * as Animatable from 'react-native-animatable';
 class VotingResultsScreen extends React.Component {
   onShare = topVotes => {
@@ -151,7 +150,6 @@ class VotingResultsScreen extends React.Component {
     const { navigation } = this.props;
     const screenProps = navigation.getParam('screenProps', {});
     const { votes, cards } = screenProps;
-
     let data = [
       {
         name: 'PCP',

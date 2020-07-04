@@ -6,11 +6,10 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { registerForPushNotificationsAsync } from './helpers/push-notifications.helper';
-import RF from 'react-native-responsive-fontsize';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from './actions';
-import MainMenu from './components/MainMenu';
+import MainMenuScreen from './screens/MainMenuScreen';
 
 class HomeScreen extends React.Component {
   componentDidUpdate() {
@@ -91,7 +90,7 @@ class HomeScreen extends React.Component {
       );
     } else {
       return (
-        <MainMenu navigateTo={this.navigateTo}></MainMenu>
+        <MainMenuScreen navigateTo={this.navigateTo}></MainMenuScreen>
       );
     }
   }

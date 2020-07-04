@@ -1,10 +1,10 @@
-import VotingResults from '../components/VotingResults';
-import DisclaimerScreen from '../components/Disclaimer';
-import ErrorScreen from '../components/ErrorScreen';
-import SummaryScreen from '../components/Summary';
-import IntroScreen from '../components/IntroScreen';
-import AboutScreen from '../components/AboutScreen';
-import CardGameScreen from '../components/CardGameScreen';
+import VotingResultsScreen from '../screens/VotingResultsScreen';
+import DisclaimerScreen from '../screens/DisclaimerScreen';
+import ErrorScreen from '../screens/ErrorScreen';
+import SummaryScreen from '../screens/SummaryScreen';
+import IntroScreen from '../screens/IntroScreen';
+import AboutScreen from '../screens/AboutScreen';
+import CardGameScreen from '../screens/CardGameScreen';
 import HomeScreen from '../index';
 
 const Routes = {
@@ -23,7 +23,7 @@ const Routes = {
       },
     },
     Results: {
-      screen: VotingResults,
+      screen: VotingResultsScreen,
       navigationOptions: {
         header: null,
         gesturesEnabled: false,

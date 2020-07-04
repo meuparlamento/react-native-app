@@ -1,9 +1,7 @@
 import React from 'react';
 import {
   StyleSheet,
-  ActivityIndicator,
   View,
-  TouchableOpacity,
   Animated,
   Dimensions,
   AsyncStorage,
@@ -16,59 +14,12 @@ import ProgressBar from 'react-native-progress/Bar';
 import { Asset } from 'expo-asset';
 import RF from 'react-native-responsive-fontsize';
 import { withNavigation } from 'react-navigation';
-
-import gradientBlue from '../../assets/gradient_blue-02.png';
-import gradientGray from '../../assets/gradient_gray-02.png';
-import checkIcon from '../../assets/icons8-checkmark-128.png';
-import cancelIcon from '../../assets/icons8-cancel-128.png';
-import skipIcon from '../../assets/icons8-circled-yellow-128.png';
-import newProposalIcon from '../../assets/icons8-synchronize-128.png';
 import * as Animatable from "react-native-animatable";
-
-
-import Card from '../Card';
-import fetchCardData from '../../helpers/api.helper';
+import { Card, Spinner, CircleButton }  from '../../components';
+import { getCardsContent } from '../../helpers/api.helper';
+import ViewContainer from '../../components/ViewContainer';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const config = require('../../../config.json');
-
-const getCards = async quantity => {
-    let cards = [];
-    let lastItemPosition = false;
-    try {
-      // fetch proposals
-      const data = await fetchCardData(`${config.api.proposals.url}/${quantity}`);
-      cards = data.map(row => {
-        const position = new Animated.ValueXY();
-  
-        const { BE, CDS_PP, PCP, PEV, PS, PSD, PAN } = row;
-        const card = {
-          image: gradientBlue,
-          detailsBackground: gradientGray,
-          position,
-          parentPosition: lastItemPosition,
-          id: row.IDProposal,
-          text: row.Description,
-          summary: row.Summary,
-          voteDate: row.VoteDate,
-          LinkPdf: row.LinkPdf,
-          isActive: false,
-          proposalDetails: false,
-          votes: { BE, CDS_PP, PCP, PEV, PS, PSD, PAN },
-          proposedBy: row.ProposedBy,
-          result: row.Result,
-          userVote: null,
-        };
-        lastItemPosition = position;
-        return card;
-      });
-      cards[0].isActive = true;
-      return cards;
-    } catch (error) {
-      console.log(error);
-      throw error;
-    }
-  };
 
 class CardGameScreen extends React.Component {
   constructor() {
@@ -86,7 +37,6 @@ class CardGameScreen extends React.Component {
         PAN: 0,
       },
       firstUse: true,
-      isAppReady: false,
       isAppOffline: false,
       newQuestionCredits: 3,
     };
@@ -203,23 +153,6 @@ class CardGameScreen extends React.Component {
     }
   }
 
-  renderCards = cards => {
-    return cards
-      .map((card, index) => {
-        return (
-          <Card
-            key={card.id + index}
-            {...card}
-            handleNopeSelect={this.handleNopeSelect}
-            handleLikeSelect={this.handleLikeSelect}
-            handleAbstenceSelect={this.handleAbstenceSelect}
-            navigation={this.props.navigation}
-          />
-        );
-      })
-      .reverse();
-  };
-
   reloadCards = async () => {
     const votes = {
       BE: 0,
@@ -232,7 +165,7 @@ class CardGameScreen extends React.Component {
     };
     try {
       this.setState({ isLoading: true, votes });
-      const cards = await getCards(10);
+      const cards = await getCardsContent(10);
       this.setState({ cards, isLoading: false, isAppOffline: false, newQuestionCredits: 3 });
     } catch (error) {
       console.log(error, '!!OFFLINE!!!');
@@ -253,20 +186,6 @@ class CardGameScreen extends React.Component {
     const { navigation } = this.props;
     navigation.navigate('Home', { newGame: true });
   }
-
-  renderSpinner = () => {
-    return (
-      <View
-        style={[
-          { height: SCREEN_HEIGHT, width: SCREEN_WIDTH },
-          styles.container,
-          styles.horizontal,
-        ]}
-      >
-        <ActivityIndicator size="large" color="#8096f6" />
-      </View>
-    );
-  };
 
   isEmptyState = () => {
     const cards = this.state.cards || [];
@@ -301,7 +220,7 @@ class CardGameScreen extends React.Component {
   swapProposalCard = async () => {
     if (this.state.newQuestionCredits > 0 && !this.state.isLoading) {
       this.setState({ isLoading: true });
-      const newCard = await getCards(1);
+      const newCard = await getCardsContent(1);
       const { cards } = this.state;
       const newCards = cards.map(card => {
         if (card.isActive) {
@@ -317,83 +236,63 @@ class CardGameScreen extends React.Component {
     }
   };
 
-  renderCardGame = () => {
-    return (
-      <React.Fragment>
-        <Animatable.View animation='zoomInDown' duration={2500} style={styles.cardArea}>
-          {this.state.isLoading ? this.renderSpinner() : this.renderCards(this.state.cards)}
-        </Animatable.View>
-      { this.gameProgress() >= 0 ? (
-        <View style={styles.progressBarContainer}>
-        <ProgressBar
-          animated
-          progress={this.gameProgress()}
-          width={SCREEN_WIDTH - RF(10)}
-          height={10}
-          borderRadius={4}
-          color={`rgba(${128}, ${150}, ${246}, ${this.gameProgress()})`}
-          style={{ flex: 0.8, borderColor: 'transparent', zIndex: 0 }}
-        />
-        <Text style={{fontFamily: 'AirbnbCerealApp-Medium', color: '#8096f6',fontSize: RF(2.2)}}>{this.gameProgress() * 10}/{this.state.cards.length}</Text>
-      </View>
-      ): null }
-        {!this.isEmptyState() ? (
-          <View style={styles.btnContainer}>
-            <View style={{ flex: 0.25, flexDirection: 'row', justifyContent: 'center' }}>
-              <TouchableOpacity style={styles.btnSmall} onPress={() => this.swapProposalCard()}>
-                <View
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: '1.4%',
-                    right: 0,
-                    bottom: '1.5%',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    zIndex: 10,
-                    backgroundColor:
-                      this.state.newQuestionCredits === 0
-                        ? 'rgba(255,255,255,0.65)'
-                        : 'rgba(255,255,255,0)',
-                    borderRadius: RF(30),
-                  }}
-                >
-                  <Text
-                    style={{
-                      fontSize: RF(1.7),
-                      color: 'white',
-                      fontFamily: 'AirbnbCerealApp-Black',
-                    }}
-                  >
-                    {this.state.newQuestionCredits}
-                  </Text>
-                </View>
-                <Animatable.Image animation='zoomIn' source={newProposalIcon} style={styles.btnIconSmall} />
-              </TouchableOpacity>
-            </View>
-            <View style={{ flex: 0.75, flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <TouchableOpacity style={styles.btn} onPress={() => this.handleNopeSelect()}>
-                <Animatable.Image animation='zoomIn' source={cancelIcon} style={styles.btnIcon} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btn} onPress={() => this.handleAbstenceSelect()}>
-              <Animatable.Image animation='zoomIn' source={skipIcon} style={styles.btnIcon} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.btn} onPress={() => this.handleLikeSelect()}>
-              <Animatable.Image animation='zoomIn' source={checkIcon} style={styles.btnIcon} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : null}
-      </React.Fragment>
-    );
+  renderCards = cards => {
+    return cards
+      .map((card, index) => {
+        return (
+          <Card
+            key={card.id + index}
+            {...card}
+            handleNopeSelect={this.handleNopeSelect}
+            handleLikeSelect={this.handleLikeSelect}
+            handleAbstenceSelect={this.handleAbstenceSelect}
+            navigation={this.props.navigation}
+          />
+        );
+      })
+      .reverse();
   };
+
+  VotingProgressBar = () => this.gameProgress() >= 0 ? (
+    <View style={styles.progressBarContainer}>
+    <ProgressBar
+      animated
+      progress={this.gameProgress()}
+      width={SCREEN_WIDTH - RF(10)}
+      height={10}
+      borderRadius={4}
+      color={`rgba(${128}, ${150}, ${246}, ${this.gameProgress()})`}
+      style={{ flex: 0.8, borderColor: 'transparent', zIndex: 0 }}
+    />
+    <Text style={{fontFamily: 'AirbnbCerealApp-Medium', color: '#8096f6',fontSize: RF(2.2)}}>{this.gameProgress() * 10}/{this.state.cards.length}</Text>
+  </View>
+  ): null;
+
+  VotingButtons = () => !this.isEmptyState() ? (
+    <View style={styles.btnContainer}>
+    <View style={{ flex: 0.25, flexDirection: 'row', justifyContent: 'center' }}>
+      <CircleButton variant="newProposal" small action={this.swapProposalCard} credits={this.state.newQuestionCredits}  />
+    </View>
+    <View style={{ flex: 0.75, flexDirection: 'row', justifyContent: 'flex-start' }}>
+      {[
+        {variant: 'cancel', action: this.handleNopeSelect},
+        {variant: 'skip', action: this.handleAbstenceSelect},
+        {variant: 'check', action: this.handleLikeSelect},
+        ].map((e, i) => <CircleButton key={i} variant={e.variant} action={e.action} />)}
+    </View>
+  </View>
+  ) : null;
 
   render() {
     return (
-      <View style={styles.container}>
+      <ViewContainer>
         <StatusBar barStyle="dark-content" hidden={false} translucent />
-        {this.renderCardGame()}
-      </View>
+        <Animatable.View animation='zoomInDown' duration={2500} style={styles.cardArea}>
+          {this.state.isLoading ? <Spinner/> : this.renderCards(this.state.cards)}
+        </Animatable.View>
+        {this.VotingProgressBar()}
+        {this.VotingButtons()}
+      </ViewContainer>
     );
   }
 }
@@ -401,14 +300,6 @@ class CardGameScreen extends React.Component {
 export default withNavigation(CardGameScreen);
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-
-    alignItems: 'stretch',
-  },
   cardArea: {
     flex: 8,
     marginTop: 30,
@@ -429,36 +320,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: -1,
-  },
-  horizontal: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
-  },
-  btn: {
-    height: RF(8.5),
-    width: RF(8.5),
-    borderRadius: RF(50),
-    marginHorizontal: RF(0.5),
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#efefef',
-  },
-  btnIcon: {
-    height: RF(9),
-    width: RF(9),
-  },
-  btnIconSmall: {
-    height: RF(6.75),
-    width: RF(6.75),
-  },
-  btnSmall: {
-    height: RF(6.95),
-    width: RF(6.95),
-    borderRadius: RF(30),
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 5,
-    backgroundColor: '#efefef',
   },
 });
