@@ -8,7 +8,6 @@ const PUSH_ENDPOINT = config.api.notifications.url;
 
 export async function registerForPushNotificationsAsync() {
   const permissionsObj = await Permissions.getAsync(Permissions.NOTIFICATIONS);
-  console.log(permissionsObj);
   const { status: existingStatus } = permissionsObj;
   let finalStatus = existingStatus;
 
