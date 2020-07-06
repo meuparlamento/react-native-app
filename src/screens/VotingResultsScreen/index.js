@@ -9,8 +9,9 @@ import {
   Share,
   Platform,
 } from 'react-native';
-import { SafeAreaView, createStackNavigator, createAppContainer } from 'react-navigation';
-
+import { SafeAreaView, createStackNavigator } from 'react-navigation';
+import { thunkGetCards } from '../../actions';
+import store from '../../store';
 import RF from 'react-native-responsive-fontsize';
 import shareIcon from '../../assets/icons8-share-64.png';
 import infoIcon from '../../assets/icons8-info-52.png';
@@ -23,6 +24,9 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 import * as Animatable from 'react-native-animatable';
 class VotingResultsScreen extends React.Component {
+  componentDidMount() {
+    thunkGetCards()
+  }
   onShare = topVotes => {
     const shareMessage =
       Platform.OS === 'ios'
@@ -340,7 +344,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ResultsNavigator = createStackNavigator(
+const ResultsNavigator = createStackNavigator(
   {
     VotingsScreen: {
       screen: VotingResultsScreen,
@@ -361,3 +365,5 @@ export default ResultsNavigator = createStackNavigator(
     mode: 'card',
   }
 );
+
+export default ResultsNavigator;

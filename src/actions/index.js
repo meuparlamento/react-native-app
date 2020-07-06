@@ -1,4 +1,7 @@
-import { SET_OFFLINE, SET_READY, SET_FIRST_USE } from './actionTypes';
+import store from '../store';
+import { getCardsContent } from '../helpers/api.helper';
+
+import { SET_OFFLINE, SET_READY, SET_FIRST_USE, FETCH_CARDS, GET_CARDS_SUCCESS, GET_CARDS_ERROR, ADD_CARD, FETCH_SINGLE_CARD, CLEAN_CARDS } from './actionTypes';
 
 export const setOffline = value => {
     return {
@@ -19,4 +22,66 @@ export const setAppFirstUse = value => {
         type: SET_FIRST_USE,
         payload: value,
     }
-} 
+}
+
+export const fetchCards = quantity => {
+    console.log('in actions', quantity);
+    return {
+        type: FETCH_CARDS,
+        payload: { quantity },
+    }
+}
+
+export const fetchSingleCard = () => ({ type: FETCH_SINGLE_CARD });
+
+export const getCardsSuccess = cards => {
+    return {
+        type: GET_CARDS_SUCCESS,
+        data: cards,
+    }
+}
+
+export const addCardSuccess = card => {
+    return {
+        type: ADD_CARD,
+        data: card,
+    }
+}
+
+export const getCardsError = () => {
+    return {
+        type: GET_CARDS_ERROR,
+    }
+}
+
+export const cleanCards = () => {
+    return {
+        type: CLEAN_CARDS,
+    }
+}
+
+export const thunkGetCards = quantity => {
+    store.dispatch(fetchCards())
+    return async (dispatch) => {
+        try {
+            dispatch(getCardsSuccess( await getCardsContent(quantity)));
+        } catch (error) {
+            console.log('ERROR IN ACTIONS', error);
+            dispatch(getCardsError());
+        }
+    }
+}
+
+export const thunkReplaceCard = () => {
+    store.dispatch(fetchSingleCard())
+    return async (dispatch) => {
+        try {
+            const [ card ] = await getCardsContent(1);
+            console.log('IN ACTION CARD', card);
+            dispatch(addCardSuccess(card));
+        } catch (error) {
+            console.log('ERROR IN ACTIONS', error);
+            dispatch(getCardsError());
+        }
+    }
+}

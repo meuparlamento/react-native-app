@@ -8,6 +8,10 @@ import {
   StatusBar,
   Text,
 } from 'react-native';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+import { bindActionCreators } from 'redux';
+
 import Image from 'react-native-remote-svg';
 import ProgressBar from 'react-native-progress/Bar';
 
@@ -16,7 +20,6 @@ import RF from 'react-native-responsive-fontsize';
 import { withNavigation } from 'react-navigation';
 import * as Animatable from "react-native-animatable";
 import { Card, Spinner, CircleButton }  from '../../components';
-import { getCardsContent } from '../../helpers/api.helper';
 import ViewContainer from '../../components/ViewContainer';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -25,8 +28,6 @@ class CardGameScreen extends React.Component {
   constructor() {
     super();
     this.state = {
-      cards: [],
-      isLoading: true,
       votes: {
         BE: 0,
         CDS_PP: 0,
@@ -36,8 +37,6 @@ class CardGameScreen extends React.Component {
         PSD: 0,
         PAN: 0,
       },
-      firstUse: true,
-      isAppOffline: false,
       newQuestionCredits: 3,
     };
   }
@@ -45,13 +44,6 @@ class CardGameScreen extends React.Component {
   async componentDidMount() {
     await this.reloadCards();
   }
-
-  componentDidUpdate() {
-    if (!this.state.isAppOffline && !this.state.isLoading) {
-      this.navigateToResults();
-    }
-  }
-
   onCardSwiped = id => {
     this.setState(prevState => {
       const swipedIndex = prevState.cards.findIndex(card => card.id === id);
@@ -66,7 +58,7 @@ class CardGameScreen extends React.Component {
   };
 
   showCardDetails = id => {
-    const card = this.state.cards.find(card => card.id === id);
+    const card = this.props.cards.find(card => card.id === id);
     const { navigation } = this.props;
     const screenProps = {
       text: card.summary,
@@ -75,58 +67,58 @@ class CardGameScreen extends React.Component {
   };
 
   handleNopeSelect = (dy = 0, position = false) => {
-    if(this.state.isLoading) {
+    if(this.props.isLoadingCards) {
       return
     }
-    const activeIndex = this.state.cards.findIndex(card => card.isActive);
+    const activeIndex = this.props.cards.findIndex(card => card.isActive);
     if (activeIndex < 0) return;
     if (!position) {
-      position = this.state.cards[activeIndex].position;
+      position = this.props.cards[activeIndex].position;
     }
     this.handleVotes(activeIndex, -1);
     Animated.spring(position, {
       toValue: { x: -SCREEN_WIDTH - 100, y: dy },
-    }).start(this.onCardSwiped(this.state.cards[activeIndex].id));
+    }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
   handleAbstenceSelect = (dy = 0, dx = 0, position = false) => {
-    if(this.state.isLoading) {
+    if(this.props.isLoadingCards) {
       return
     }
-    const activeIndex = this.state.cards.findIndex(card => card.isActive);
+    const activeIndex = this.props.cards.findIndex(card => card.isActive);
     if (activeIndex < 0) return;
 
     if (!position) {
-      position = this.state.cards[activeIndex].position;
+      position = this.props.cards[activeIndex].position;
     }
     this.handleVotes(activeIndex, 0);
     Animated.spring(position, {
       toValue: { x: dx, y: -SCREEN_HEIGHT - 100 },
-    }).start(this.onCardSwiped(this.state.cards[activeIndex].id));
+    }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
   handleLikeSelect = (dy = 0, position = false) => {
-    if(this.state.isLoading) {
+    if(this.props.isLoadingCards) {
       return
     }
-    const activeIndex = this.state.cards.findIndex(card => card.isActive);
+    const activeIndex = this.props.cards.findIndex(card => card.isActive);
     if (activeIndex < 0) return;
     if (!position) {
-      position = this.state.cards[activeIndex].position;
+      position = this.props.cards[activeIndex].position;
     }
     this.handleVotes(activeIndex, 1);
     Animated.spring(position, {
       toValue: { x: SCREEN_WIDTH + 100, y: dy },
-    }).start(this.onCardSwiped(this.state.cards[activeIndex].id));
+    }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
   handleShowCardDetails() {
-    const activeIndex = this.state.cards.findIndex(card => card.isActive);
-    this.showCardDetails(this.state.cards[activeIndex].id);
+    const activeIndex = this.props.cards.findIndex(card => card.isActive);
+    this.showCardDetails(this.props.cards[activeIndex].id);
   }
 
   handleVotes(cardIndex, userVote) {
-    const { cards } = this.state;
+    const { cards } = this.props;
     const card = cards[cardIndex];
     const cardVotes = card.votes;
 
@@ -138,19 +130,17 @@ class CardGameScreen extends React.Component {
         votes[key] = votes[key] + 1;
       }
     }
-    this.setState({ cards, votes });
+    this.setState({ votes, cards });
   }
 
   navigateToResults() {
     const { navigation } = this.props;
-    if (this.isEmptyState()) {
       const screenProps = {
         votes: this.state.votes,
-        cards: this.state.cards,
+        cards: this.props.cards,
         navigation,
       };
       navigation.navigate('Results', { screenProps });
-    }
   }
 
   reloadCards = async () => {
@@ -163,13 +153,12 @@ class CardGameScreen extends React.Component {
       PSD: 0,
       PAN: 0,
     };
-    try {
-      this.setState({ isLoading: true, votes });
-      const cards = await getCardsContent(10);
-      this.setState({ cards, isLoading: false, isAppOffline: false, newQuestionCredits: 3 });
-    } catch (error) {
-      console.log(error, '!!OFFLINE!!!');
-      this.setState({ isAppOffline: true });
+
+    this.props.thunkGetCards(10);
+    this.setState({newQuestionCredits: 3, votes});
+
+    if(this.props.isErrorFetchingCards) {
+      this.props.setOffline(true);
       this.navigateToError();
     }
   };
@@ -187,8 +176,8 @@ class CardGameScreen extends React.Component {
     navigation.navigate('Home', { newGame: true });
   }
 
-  isEmptyState = () => {
-    const cards = this.state.cards || [];
+  isDoneVoting = () => {
+    const cards = this.props.cards || [];
     return cards.findIndex(card => card.isActive) < 0;
   };
 
@@ -213,44 +202,17 @@ class CardGameScreen extends React.Component {
   
 
   gameProgress = () => {
-    const { cards } = this.state;
+    const { cards } = this.props;
     return cards.findIndex(card => card.isActive) / cards.length;
   };
 
   swapProposalCard = async () => {
-    if (this.state.newQuestionCredits > 0 && !this.state.isLoading) {
-      this.setState({ isLoading: true });
-      const newCard = await getCardsContent(1);
-      const { cards } = this.state;
-      const newCards = cards.map(card => {
-        if (card.isActive) {
-          return newCard.find(card => card !== null || card !== undefined);
-        }
-        return card;
-      });
+    if (this.state.newQuestionCredits > 0 && !this.props.isLoadingCards) {
+      this.props.thunkReplaceCard();
       this.setState({
         newQuestionCredits: this.state.newQuestionCredits - 1,
-        cards: newCards,
-        isLoading: false,
       });
     }
-  };
-
-  renderCards = cards => {
-    return cards
-      .map((card, index) => {
-        return (
-          <Card
-            key={card.id + index}
-            {...card}
-            handleNopeSelect={this.handleNopeSelect}
-            handleLikeSelect={this.handleLikeSelect}
-            handleAbstenceSelect={this.handleAbstenceSelect}
-            navigation={this.props.navigation}
-          />
-        );
-      })
-      .reverse();
   };
 
   VotingProgressBar = () => this.gameProgress() >= 0 ? (
@@ -264,11 +226,11 @@ class CardGameScreen extends React.Component {
       color={`rgba(${128}, ${150}, ${246}, ${this.gameProgress()})`}
       style={{ flex: 0.8, borderColor: 'transparent', zIndex: 0 }}
     />
-    <Text style={{fontFamily: 'AirbnbCerealApp-Medium', color: '#8096f6',fontSize: RF(2.2)}}>{this.gameProgress() * 10}/{this.state.cards.length}</Text>
+    <Text style={{fontFamily: 'AirbnbCerealApp-Medium', color: '#8096f6',fontSize: RF(2.2)}}>{this.gameProgress() * 10}/{this.props.cards.length}</Text>
   </View>
   ): null;
 
-  VotingButtons = () => !this.isEmptyState() ? (
+  VotingButtons = () => !this.isDoneVoting() ? (
     <View style={styles.btnContainer}>
     <View style={{ flex: 0.25, flexDirection: 'row', justifyContent: 'center' }}>
       <CircleButton variant="newProposal" small action={this.swapProposalCard} credits={this.state.newQuestionCredits}  />
@@ -284,11 +246,30 @@ class CardGameScreen extends React.Component {
   ) : null;
 
   render() {
+    console.log('PROPS IN CARD GAME SCREEN', this.props.isLoadingCards, this.props.isErrorFetchingCards, this.props.cards.map(e => e.id));
+    if (this.props.isLoadingCards === false && this.isDoneVoting()) {
+      this.navigateToResults();
+    }
+    const { cards } = this.props;
     return (
       <ViewContainer>
         <StatusBar barStyle="dark-content" hidden={false} translucent />
         <Animatable.View animation='zoomInDown' duration={2500} style={styles.cardArea}>
-          {this.state.isLoading ? <Spinner/> : this.renderCards(this.state.cards)}
+          {this.props.isLoadingCards ? <Spinner/> : (
+            cards.map((card, index) => {
+              return (
+                <Card
+                  key={card.id + index}
+                  {...card}
+                  handleNopeSelect={this.handleNopeSelect}
+                  handleLikeSelect={this.handleLikeSelect}
+                  handleAbstenceSelect={this.handleAbstenceSelect}
+                  navigation={this.props.navigation}
+                />
+              );
+            })
+            .reverse()
+          )}
         </Animatable.View>
         {this.VotingProgressBar()}
         {this.VotingButtons()}
@@ -297,7 +278,19 @@ class CardGameScreen extends React.Component {
   }
 }
 
-export default withNavigation(CardGameScreen);
+const mapStateToProps = store => ({
+    isOffline: store.appStatusReducer.isOffline,
+    cards: store.cardsReducer.cards,
+    isLoadingCards: store.cardsReducer.isLoadingCards,
+    isLoadingSingleCard: store.cardsReducer.isLoadingSingleCard,
+    isErrorFetchingCards: store.cardsReducer.isError,
+  });
+
+const mapDispatchToProps = dispatch => (
+  bindActionCreators(actions, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(CardGameScreen));
 
 const styles = StyleSheet.create({
   cardArea: {

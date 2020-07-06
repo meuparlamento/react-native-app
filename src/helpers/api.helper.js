@@ -20,6 +20,7 @@ const fetchCardData = async (url) => {
   }
 
 export const getCardsContent = async quantity => {
+  console.log('helper', quantity);
   const proposalsUrl = config.api.proposals.url;
   let cards = [];
   let lastItemPosition = false;

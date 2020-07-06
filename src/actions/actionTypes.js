@@ -1,3 +1,9 @@
 export const SET_OFFLINE = 'SET_OFFLINE';
 export const SET_READY = 'SET_READY';
 export const SET_FIRST_USE = 'SET_FIRST_USE';
+export const FETCH_CARDS = 'FETCH_CARDS';
+export const FETCH_SINGLE_CARD = 'FETCH_SINGLE_CARD';
+export const GET_CARDS_SUCCESS = 'GET_CARDS_SUCCESS';
+export const GET_CARDS_ERROR = 'GET_CARDS_ERROR';
+export const ADD_CARD = 'ADD_CARD';
+export const CLEAN_CARDS = 'CLEAN_CARDS';

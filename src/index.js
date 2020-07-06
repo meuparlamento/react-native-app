@@ -7,16 +7,14 @@ import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { registerForPushNotificationsAsync } from './helpers/push-notifications.helper';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from './actions';
+import { bindActionCreators } from 'redux';
 import MainMenuScreen from './screens/MainMenuScreen';
 
 class HomeScreen extends React.Component {
   componentDidUpdate() {
     const { isAppReady, firstUse, isOffline } = this.props;
     
-    console.log('props from redux', isAppReady, firstUse);
-  
     if(isAppReady && firstUse) {
       this.navigateTo('Intro');
     }
@@ -29,7 +27,6 @@ class HomeScreen extends React.Component {
   loadResourcesAsync = async () => {
     const { setAppFirstUse } = this.props;
     try {
-      // load random cards
       const images = [
         require('./assets/icons8-cancel-128.png'),
         require('./assets/icons8-checkmark-128.png'),
@@ -42,7 +39,6 @@ class HomeScreen extends React.Component {
         require('./assets/logos/PS.png'),
         require('./assets/logos/PSD.png'),
       ];
-      // load custom font
       const imagesPromise = this.cacheImages(images);
       const fontsPromise = Font.loadAsync({
         'AirbnbCerealApp-Black': require('./assets/fonts/AirbnbCerealApp-Black.ttf'),
@@ -54,7 +50,6 @@ class HomeScreen extends React.Component {
       });
       await Promise.all([imagesPromise, fontsPromise]);
       const firstUse = !(await AsyncStorage.getItem('alreadyLaunched'));
-      console.log('new firstUse', firstUse);
       if (firstUse) {
        await registerForPushNotificationsAsync();
       }
