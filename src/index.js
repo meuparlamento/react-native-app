@@ -84,9 +84,7 @@ class HomeScreen extends React.Component {
         />
       );
     } else {
-      return (
-        <MainMenuScreen navigateTo={this.navigateTo}></MainMenuScreen>
-      );
+      return <MainMenuScreen navigateTo={this.navigateTo} />;
     }
   }
 }

@@ -28,7 +28,8 @@
     "platforms": [
       "android",
       "ios"
-    ]
+    ],
+    "sdkVersion": "37.0.0"
   },
   "name": "meuparlamento"
 }

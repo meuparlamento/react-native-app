@@ -42,6 +42,9 @@ class CardGameScreen extends React.Component {
   }
 
   async componentDidMount() {
+    const { navigation } = this.props;
+    const recentProposals = navigation.getParam('recentProposals', {});
+    console.log('------------------>', recentProposals);
     await this.reloadCards();
   }
   onCardSwiped = id => {
@@ -143,7 +146,7 @@ class CardGameScreen extends React.Component {
       navigation.navigate('Results', { screenProps });
   }
 
-  reloadCards = async () => {
+  reloadCards = async (recentProposals = false) => {
     const votes = {
       BE: 0,
       CDS_PP: 0,
@@ -154,7 +157,7 @@ class CardGameScreen extends React.Component {
       PAN: 0,
     };
 
-    this.props.thunkGetCards(10);
+    this.props.thunkGetCards(10, recentProposals);
     this.setState({newQuestionCredits: 3, votes});
 
     if(this.props.isErrorFetchingCards) {
@@ -165,9 +168,6 @@ class CardGameScreen extends React.Component {
 
   navigateToError() {
     const { navigation } = this.props;
-    const screenProps = {
-      reloadCards: this.reloadCards,
-    };
     navigation.navigate('Error', { screenProps });
   }
 
@@ -246,8 +246,8 @@ class CardGameScreen extends React.Component {
   ) : null;
 
   render() {
-    console.log('PROPS IN CARD GAME SCREEN', this.props.isLoadingCards, this.props.isErrorFetchingCards, this.props.cards.map(e => e.id));
-    if (this.props.isLoadingCards === false && this.isDoneVoting()) {
+    console.log('PROPS IN CARD GAME SCREEN', this.props.isLoadingCards, this.props.isLoadingCards, this.props.isErrorFetchingCards, this.props.cards.map(e => e.id));
+    if (!this.props.isLoadingCards && this.props.isLoadingCards === false && this.isDoneVoting()) {
       this.navigateToResults();
     }
     const { cards } = this.props;

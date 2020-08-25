@@ -60,11 +60,11 @@ export const cleanCards = () => {
     }
 }
 
-export const thunkGetCards = quantity => {
+export const thunkGetCards = (quantity, recentProposals = false) => {
     store.dispatch(fetchCards())
     return async (dispatch) => {
         try {
-            dispatch(getCardsSuccess( await getCardsContent(quantity)));
+            dispatch(getCardsSuccess( await getCardsContent(quantity, recentProposals)));
         } catch (error) {
             console.log('ERROR IN ACTIONS', error);
             dispatch(getCardsError());

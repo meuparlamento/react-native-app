@@ -52,75 +52,25 @@ class VotingResultsScreen extends React.Component {
   };
 
   renderPartyLogos = winnerPartyArr => {
+    const logos = {
+      PS: require('../../assets/logos/PS.png'),
+      PSD: require('../../assets/logos/PSD.png'),
+      BE: require('../../assets/logos/BE.png'),
+      PEV: require('../../assets/logos/PEV.png'),
+      PCP: require('../../assets/logos/PCP.png'),
+      CDS_PP: require('../../assets/logos/CDS_PP.png'),
+      PAN: require('../../assets/logos/PAN.png'),
+      FALLBACK: require('../../assets/logos/PAN.png'),
+    }
     return winnerPartyArr
-      .map((winner, i) => {
-        switch (winner) {
-          case 'PS':
-            return (
-              <Animatable.Image
-                animation='zoomIn'
-                key={i}
-                source={require('../../assets/logos/PS.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          case 'PSD':
-            return (
-              <Animatable.Image
-                animation='zoomIn'
-                key={i}
-                source={require('../../assets/logos/PSD.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          case 'BE':
-            return (
-              <Image
-                key={i}
-                source={require('../../assets/logos/BE.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          case 'PEV':
-            return (
-              <Animatable.Image
-                animation='zoomIn'
-                key={i}
-                source={require('../../assets/logos/PEV.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          case 'PCP':
-            return (
-              <Animatable.Image
-                animation='zoomIn'
-                key={i}
-                source={require('../../assets/logos/PCP.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          case 'CDS_PP':
-            return (
-              <Animatable.Image
-                animation='zoomIn'
-                key={i}
-                source={require('../../assets/logos/CDS_PP.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          case 'PAN':
-            return (
-              <Animatable.Image
-                animation='zoomIn'
-                key={i}
-                source={require('../../assets/logos/PAN.png')}
-                style={styles.partyLogoImg}
-              />
-            );
-          default:
-            return null;
-        }
-      })
+      .map((winner, i) =>
+        <Animatable.Image
+        animation='zoomIn'
+        key={i}
+        source={logos[winner] || logos.FALLBACK}
+        style={styles.partyLogoImg}
+      />
+      )
       .slice(0, 3);
   };
 
@@ -154,60 +104,6 @@ class VotingResultsScreen extends React.Component {
     const { navigation } = this.props;
     const screenProps = navigation.getParam('screenProps', {});
     const { votes, cards } = screenProps;
-    let data = [
-      {
-        name: 'PCP',
-        votes: votes.PCP > 0 ? votes.PCP : 0,
-        color: '#db9c83',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-      {
-        name: 'PEV',
-        votes: votes.PEV > 0 ? votes.PEV : 0,
-        color: '#c2db83',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-      {
-        name: 'BE',
-        votes: votes.BE > 0 ? votes.BE : 0,
-        color: '#db8396',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-      {
-        name: 'PS',
-        votes: votes.PS > 0 ? votes.PS : 0,
-        color: '#83c2db',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-      {
-        name: 'PSD',
-        votes: votes.PSD > 0 ? votes.PSD : 0,
-        color: '#8396db',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-      {
-        name: 'CDS-PP',
-        votes: votes.CDS_PP > 0 ? votes.CDS_PP : 0,
-        color: '#9c83db',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-      {
-        name: 'PAN',
-        votes: votes.PAN > 0 ? votes.PAN : 0,
-        color: '#9c83db',
-        legendFontColor: '#7F7F7F',
-        legendFontSize: 15,
-      },
-    ];
-
-    // show only items with votes
-    data = data.filter(row => row.votes > 0);
 
     const votesArray = Object.keys(votes);
     const maxVotesValue = votes[votesArray.reduce((a, b) => (votes[a] > votes[b] ? a : b))];

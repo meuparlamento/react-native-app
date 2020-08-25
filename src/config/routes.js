@@ -22,6 +22,13 @@ const Routes = {
         gesturesEnabled: false,
       },
     },
+    RecentProposalsGame: {
+      screen: CardGameScreen,
+      navigationOptions: {
+        header: null,
+        gesturesEnabled: false,
+      },
+    },
     Results: {
       screen: VotingResultsScreen,
       navigationOptions: {
