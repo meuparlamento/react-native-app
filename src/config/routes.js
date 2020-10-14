@@ -1,4 +1,5 @@
-import VotingResultsScreen from '../screens/VotingResultsScreen';
+import BatchVotingResultsScreen from '../screens/VotingResultsScreen/BatchResultsScreen';
+import RecenthVotingResultsScreen from '../screens/VotingResultsScreen/RecentResultsScreen';
 import DisclaimerScreen from '../screens/DisclaimerScreen';
 import ErrorScreen from '../screens/ErrorScreen';
 import SummaryScreen from '../screens/SummaryScreen';
@@ -22,8 +23,22 @@ const Routes = {
         gesturesEnabled: false,
       },
     },
-    Results: {
-      screen: VotingResultsScreen,
+    RecentProposalsGame: {
+      screen: CardGameScreen,
+      navigationOptions: {
+        header: null,
+        gesturesEnabled: false,
+      },
+    },
+    BatchResults: {
+      screen: BatchVotingResultsScreen,
+      navigationOptions: {
+        header: null,
+        gesturesEnabled: false,
+      },
+    },
+    RecentResults: {
+      screen: RecenthVotingResultsScreen,
       navigationOptions: {
         header: null,
         gesturesEnabled: false,

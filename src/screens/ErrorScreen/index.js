@@ -2,17 +2,16 @@ import React, { Component } from 'react';
 import { Text, TouchableOpacity} from 'react-native';
 import { withNavigation, SafeAreaView } from 'react-navigation';
 import Image from 'react-native-scalable-image';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+import { bindActionCreators } from 'redux';
 
 
 class ErrorScreen extends Component {
 
   tryAgain(){
-    const { navigation } = this.props;
-    const screenProps = navigation.getParam('screenProps', {});
-    if(screenProps.reloadCards) {
-      const { reloadCards } = screenProps;
-      reloadCards();
-    }
+    const { navigation, thunkGetCards } = this.props;
+    thunkGetCards(10);
     navigation.navigate('Home');
   }
 
@@ -29,4 +28,12 @@ class ErrorScreen extends Component {
   }
 }
 
-export default withNavigation(ErrorScreen);
+const mapStateToProps = store => ({
+  isErrorFetchingCards: store.cardsReducer.isError,
+});
+
+const mapDispatchToProps = dispatch => (
+bindActionCreators(actions, dispatch)
+)
+
+export default connect(mapStateToProps, mapDispatchToProps)(withNavigation(ErrorScreen));

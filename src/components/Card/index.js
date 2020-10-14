@@ -90,7 +90,7 @@ export default class Card extends React.Component {
         } else if (dy < -150) {
           this.props.handleAbstenceSelect(gestureState.dy, this.position);
         } else if (noMovement) {
-          this.navigateToSummary(this.props.summary);
+          this.props.handleShowCardDetails();
         } else {
           Animated.spring(this.position, {
             toValue: { x: 0, y: 0 },
@@ -99,12 +99,6 @@ export default class Card extends React.Component {
         }
       },
     });
-  }
-
-  navigateToSummary(text) {
-    const { navigation } = this.props;
-    const screenProps = { text };
-    navigation.navigate('Summary', { screenProps });
   }
 
   showProposalDetails() {

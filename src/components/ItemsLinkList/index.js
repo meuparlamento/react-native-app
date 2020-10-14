@@ -112,7 +112,6 @@ export default class NewsScreen extends Component {
     ) : (
       <View style={{
         height: Dimensions.get('screen').height,
-        // flex: 1,
         paddingHorizontal: RF(5),
         alignItems: 'center', 
         justifyContent: 'center'
@@ -121,9 +120,6 @@ export default class NewsScreen extends Component {
         <TouchableOpacity
         style={{
           ...styles.listItemContainer,
-          // flex: 5,
-          // justifyContent: 'center',
-          // alignItems: 'center',
         }}
         onPress={this.props.closeModal}
       >
