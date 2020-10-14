@@ -4,16 +4,21 @@
   },
   "api": {
     "proposals": {
-      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/proposals/batch"
+      "recent": {
+        "url": "https://kx2rkc1hzg.execute-api.eu-west-2.amazonaws.com/api/proposals/recent"
+      },
+      "batch": {
+        "url": "https://kx2rkc1hzg.execute-api.eu-west-2.amazonaws.com/api/proposals/batch"
+      }
     },
     "news": {
-      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/proposals/news"
+      "url": "https://kx2rkc1hzg.execute-api.eu-west-2.amazonaws.com/api/proposals/news"
     },
     "authors": {
-      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/proposals/authors"
+      "url": "https://kx2rkc1hzg.execute-api.eu-west-2.amazonaws.com/api/proposals/authors"
     },
     "notifications": {
-      "url": "https://ppzrs09e5l.execute-api.eu-west-2.amazonaws.com/dev/register_device"
+      "url": "https://kx2rkc1hzg.execute-api.eu-west-2.amazonaws.com/api/register_device"
     }
   }
 }

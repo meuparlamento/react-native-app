@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
-// import AppScreen from './src';
 import Routes from './src/config/routes';
+import store from './src/store';
 import { useScreens } from 'react-native-screens';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import handleCustomTransition from './src/config/transitions';
-import Reducers from './src/reducers';
 
 useScreens();
-
-const store = createStore(Reducers);
 
 const AppNavigator = createStackNavigator(
   Routes,
