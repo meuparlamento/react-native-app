@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withNavigation } from 'react-navigation';
 import  Intro  from '../../components/Intro';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions';

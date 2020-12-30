@@ -95,6 +95,7 @@ export default class Card extends React.Component {
           Animated.spring(this.position, {
             toValue: { x: 0, y: 0 },
             friction: 4,
+            useNativeDriver: true,
           }).start();
         }
       },

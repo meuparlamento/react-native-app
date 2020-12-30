@@ -19,7 +19,8 @@
     "android": {
       "package": "pt.contamehistorias.omeuparlamento",
       "permissions": [],
-      "versionCode": 4
+      "versionCode": 4,
+      "useNextNotificationsApi": true
     },
     "notification": {
       "icon": "./src/assets/notification-icon.png",
@@ -28,8 +29,7 @@
     "platforms": [
       "android",
       "ios"
-    ],
-    "sdkVersion": "37.0.0"
+    ]
   },
   "name": "meuparlamento"
 }

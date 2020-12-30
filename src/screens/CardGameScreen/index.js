@@ -2,12 +2,12 @@ import React from 'react';
 import {
   Animated,
   Dimensions,
-  AsyncStorage,
   StatusBar,
 } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { bindActionCreators } from 'redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Image from 'react-native-remote-svg';
 
@@ -33,13 +33,15 @@ class CardGameScreen extends React.Component {
       },
       newQuestionCredits: 3,
       recentProposals: false,
+      id: null,
     };
   }
 
   async componentDidMount() {
     const { navigation } = this.props;
     const recentProposals = navigation.getParam('recentProposals', false);
-    this.setState({ recentProposals });
+    const id = navigation.getParam('id', null);
+    this.setState({ recentProposals, id });
     await this.reloadCards(recentProposals);
   }
   onCardSwiped = id => {
@@ -76,6 +78,7 @@ class CardGameScreen extends React.Component {
     this.handleVotes(activeIndex, -1);
     Animated.spring(position, {
       toValue: { x: -SCREEN_WIDTH - 100, y: dy },
+      useNativeDriver: true,
     }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
@@ -92,6 +95,7 @@ class CardGameScreen extends React.Component {
     this.handleVotes(activeIndex, 0);
     Animated.spring(position, {
       toValue: { x: dx, y: -SCREEN_HEIGHT - 100 },
+      // useNativeDriver: true,
     }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
@@ -107,6 +111,7 @@ class CardGameScreen extends React.Component {
     this.handleVotes(activeIndex, 1);
     Animated.spring(position, {
       toValue: { x: SCREEN_WIDTH + 100, y: dy },
+      useNativeDriver: true,
     }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
@@ -144,8 +149,14 @@ class CardGameScreen extends React.Component {
       };
     if (!this.state.recentProposals) {
       navigation.navigate('BatchResults', { screenProps });
-    } else {
-      this.props.setRecentProposalData(this.state.votes);
+      alert('batch results');
+    } else if (this.state.recentProposals) {
+      const data = {
+        id: this.state.id,
+        votes: this.state.votes,
+        cards: this.props.cards,
+      };
+      this.props.setRecentProposalData(data);
       navigation.navigate('RecentResults', { screenProps });
     }
   }

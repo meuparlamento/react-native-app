@@ -27,7 +27,7 @@ class MainMenuScreen extends Component {
             <TouchableOpacity onPress={() => this.props.navigateTo('CardGame')}>
               <Animatable.Text animation="slideInDown" style={styles.menuItem}>Novo jogo</Animatable.Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('CardGame', { recentProposals: true })}>
+            <TouchableOpacity onPress={() => this.props.navigateTo('CardGame', { recentProposals: true })}>
               <Animatable.Text animation="slideInDown" style={styles.menuItem}>Propostas Recentes</Animatable.Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.navigateTo('Intro')}>

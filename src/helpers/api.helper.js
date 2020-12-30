@@ -28,11 +28,10 @@ export const getCardsContent = async (quantity, recentProposals = false) => {
   let lastItemPosition = false;
   try {
     // fetch proposals
-    const data = recentProposals ? await fetchCardData(`${proposalsUrl}/${quantity}`) : await fetchCardData(`${recentUrl}/${quantity}`);
+    const data = recentProposals ? await fetchCardData(`${recentUrl}/${quantity}`) : await fetchCardData(`${proposalsUrl}/${quantity}`);
     cards = data.map(row => {
       const position = new Animated.ValueXY();
       const { BE, CDS_PP, PCP, PEV, PS, PSD, PAN } = row;
-      console.log(row);
       const card = {
         position,
         parentPosition: lastItemPosition,

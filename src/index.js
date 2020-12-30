@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, AsyncStorage } from 'react-native';
 import Image from 'react-native-remote-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { registerForPushNotificationsAsync } from './helpers/push-notifications.helper';
@@ -12,6 +13,37 @@ import { bindActionCreators } from 'redux';
 import MainMenuScreen from './screens/MainMenuScreen';
 
 class HomeScreen extends React.Component {
+  componentDidMount() {
+    this.loadResourcesAsync();
+    Notifications.addNotificationReceivedListener(notification => {
+      console.log('notification ------------------', notification);
+    })
+
+    // Listen to notification interaction
+    this.notifTapSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+      const data = response.notification.request.content.data;
+      
+      if (data.type == 'proposal') {
+        this.props.navigation.navigate('RecentProposalsGame', { recentProposals: true, id: data.id });
+      } else if (data.type == 'results') {
+        const screenProps = {
+          id: data.id,
+          votes: data?.votes ?? {},
+          cards: this.props.recentProposalData.length > 0 
+            ? this.props.recentProposalData.find(r => r.id == data.id).cards 
+            : [],
+          navigation: this.props.navigation,
+        };
+        
+        this.props.navigation.navigate('RecentResults', { screenProps });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.notifTapSubscription && this.notifTapSubscription.remove();
+  }
+
   componentDidUpdate() {
     const { isAppReady, firstUse, isOffline } = this.props;
     
@@ -70,9 +102,9 @@ class HomeScreen extends React.Component {
     });
   }
   
-  navigateTo = (screen) => {
+  navigateTo = (screen, params) => {
     const { navigation } = this.props;
-    navigation.navigate(screen);
+    navigation.navigate(screen, params);
   };
 
   render() {
@@ -81,6 +113,7 @@ class HomeScreen extends React.Component {
         <AppLoading
           startAsync={this.loadResourcesAsync}
           onFinish={() => this.props.setAppReady(true)}
+          onError={console.warn}
         />
       );
     } else {
@@ -92,6 +125,7 @@ const mapStateToProps = store => ({
   isOffline: store.appStatusReducer.isOffline,
   isAppReady: store.appStatusReducer.isAppReady,
   firstUse: store.appStatusReducer.firstUse,
+  recentProposalData: store.proposalReducer.recentProposalData,
 });
 
 const mapDispatchToProps = dispatch => (
