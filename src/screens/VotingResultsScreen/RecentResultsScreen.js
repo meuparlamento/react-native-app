@@ -76,6 +76,42 @@ class RecentResultsScreen extends React.Component {
         )
     }
 
+    renderContent = (id) => {
+        if (id) {
+            return (
+                <>
+                    <View style={styles.subTitleContainer}>
+                        <Animatable.Text animation='slideInRight' style={styles.containerSubtitle}>Quem votou contigo</Animatable.Text>
+                    </View>
+                    <View style={styles.logoContainer}>
+                        {topVotes.length === 0 ? (
+                            <Animatable.Text animation='slideInRight' style={styles.noVotesText}>Nenhum partido votou como tu</Animatable.Text>
+                        ) : (
+                            this.renderPartyLogos(topVotes)
+                        )}
+                    </View>
+                    <View style={[styles.subTitleContainer, { flex: 0.1, justifyContent: 'center' }]}>
+                        <Animatable.Text animation='slideInRight' style={styles.containerSubtitle}>Os teus votos</Animatable.Text>
+                    </View>
+                    <Animatable.View animation='fadeInRight' style={styles.carouselContainer}>
+                        <VotesCarousel
+                            navigation={navigation}
+                            screenWidth={SCREEN_WIDTH}
+                            screenHeight={SCREEN_HEIGHT}
+                            cards={cards}
+                        />
+                    </Animatable.View>
+                </>
+            )
+        } else {
+            return (
+                <View style={styles.messageContainer}>
+                    <Animatable.Text animation='fadeIn' style={styles.containerMessage}>Obrigado por votar na proposta. Iremos atualizá-lo assim que a votação estiver no ar.</Animatable.Text>
+                </View>
+            )   
+        }
+    }
+
     renderPartyLogos = winnerPartyArr => {
         const logos = {
           PS: require('../../assets/logos/PS.png'),
@@ -116,36 +152,7 @@ class RecentResultsScreen extends React.Component {
                     {id && this.renderShareButton(topVotes)}
                     {id && this.renderAboutButton()}
                 </View>
-                {!id && (
-                    <View style={styles.messageContainer}>
-                        <Animatable.Text animation='fadeIn' style={styles.containerMessage}>Obrigado por votar na proposta. Iremos atualizá-lo assim que a votação estiver no ar.</Animatable.Text>
-                    </View>
-                )}
-                {id && (
-                    <>
-                        <View style={styles.subTitleContainer}>
-                            <Animatable.Text animation='slideInRight' style={styles.containerSubtitle}>Quem votou contigo</Animatable.Text>
-                        </View>
-                        <View style={styles.logoContainer}>
-                            {topVotes.length === 0 ? (
-                                <Animatable.Text animation='slideInRight' style={styles.noVotesText}>Nenhum partido votou como tu</Animatable.Text>
-                            ) : (
-                                this.renderPartyLogos(topVotes)
-                            )}
-                        </View>
-                        <View style={[styles.subTitleContainer, { flex: 0.1, justifyContent: 'center' }]}>
-                            <Animatable.Text animation='slideInRight' style={styles.containerSubtitle}>Os teus votos</Animatable.Text>
-                        </View>
-                        <Animatable.View animation='fadeInRight' style={styles.carouselContainer}>
-                            <VotesCarousel
-                                navigation={navigation}
-                                screenWidth={SCREEN_WIDTH}
-                                screenHeight={SCREEN_HEIGHT}
-                                cards={cards}
-                            />
-                        </Animatable.View>
-                    </>
-                )}
+                {this.renderContent(id)}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => this.goToHome()}>
                         <Animatable.Text animation='slideInUp' style={styles.btn}>Voltar</Animatable.Text>

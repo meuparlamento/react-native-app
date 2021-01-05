@@ -15,9 +15,6 @@ import MainMenuScreen from './screens/MainMenuScreen';
 class HomeScreen extends React.Component {
   componentDidMount() {
     this.loadResourcesAsync();
-    Notifications.addNotificationReceivedListener(notification => {
-      console.log('notification ------------------', notification);
-    })
 
     // Listen to notification interaction
     this.notifTapSubscription = Notifications.addNotificationResponseReceivedListener(response => {

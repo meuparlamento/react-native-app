@@ -20,8 +20,7 @@ const fetchCardData = async (url) => {
   }
 
 export const getCardsContent = async (quantity, recentProposals = false) => {
-  console.log('helper', quantity);
-  console.log('recentProposals-API ------------------>', recentProposals);
+  console.log('getCardsContent: quantity', quantity);
   const proposalsUrl = config.api.proposals.batch.url;
   const recentUrl = config.api.proposals.recent.url;
   let cards = [];

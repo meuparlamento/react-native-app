@@ -95,7 +95,7 @@ class CardGameScreen extends React.Component {
     this.handleVotes(activeIndex, 0);
     Animated.spring(position, {
       toValue: { x: dx, y: -SCREEN_HEIGHT - 100 },
-      // useNativeDriver: true,
+      useNativeDriver: true,
     }).start(this.onCardSwiped(this.props.cards[activeIndex].id));
   };
 
@@ -121,7 +121,6 @@ class CardGameScreen extends React.Component {
   }
 
   handleVotes(cardIndex, userVote) {
-    // console.log('userVote: ', userVote);
     const { cards } = this.props;
     const card = cards[cardIndex];
     const cardVotes = card.votes;
@@ -130,11 +129,8 @@ class CardGameScreen extends React.Component {
 
     const { votes } = this.state;
     for (const key in votes) {
-      // console.log('key: ', key);
-      // console.log('cardVotes: ', cardVotes[key]);
       if (votes.hasOwnProperty(key) && userVote === cardVotes[key]) {
         votes[key] = votes[key] + 1;
-        // console.log('votes counted: ', votes[key])
       }
     }
     this.setState({ votes, cards });
@@ -142,15 +138,13 @@ class CardGameScreen extends React.Component {
 
   navigateToResults() {
     const { navigation } = this.props;
-      const screenProps = {
-        votes: this.state.votes,
-        cards: this.props.cards,
-        navigation,
-      };
-    if (!this.state.recentProposals) {
-      navigation.navigate('BatchResults', { screenProps });
-      alert('batch results');
-    } else if (this.state.recentProposals) {
+    const screenProps = {
+      votes: this.state.votes,
+      cards: this.props.cards,
+      navigation,
+    };
+    
+    if (this.state.recentProposals) {
       const data = {
         id: this.state.id,
         votes: this.state.votes,
@@ -158,7 +152,10 @@ class CardGameScreen extends React.Component {
       };
       this.props.setRecentProposalData(data);
       navigation.navigate('RecentResults', { screenProps });
+      return;
     }
+
+    navigation.navigate('BatchResults', { screenProps });
   }
 
   reloadCards = async (recentProposals = false) => {

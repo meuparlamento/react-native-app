@@ -86,9 +86,9 @@ export default class Card extends React.Component {
         } else if (dx < -150) {
           this.props.handleNopeSelect(gestureState.dy, this.position);
         } else if (dy > 150) {
-          this.props.handleAbstenceSelect(gestureState.dy, this.position);
+          this.props.handleAbstenceSelect(gestureState.dy, 0, this.position);
         } else if (dy < -150) {
-          this.props.handleAbstenceSelect(gestureState.dy, this.position);
+          this.props.handleAbstenceSelect(gestureState.dy, 0, this.position);
         } else if (noMovement) {
           this.props.handleShowCardDetails();
         } else {
