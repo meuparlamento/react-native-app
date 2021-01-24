@@ -76,7 +76,7 @@ class RecentResultsScreen extends React.Component {
         )
     }
 
-    renderContent = (id) => {
+    renderContent = (id, topVotes, cards) => {
         if (id) {
             return (
                 <>
@@ -95,7 +95,7 @@ class RecentResultsScreen extends React.Component {
                     </View>
                     <Animatable.View animation='fadeInRight' style={styles.carouselContainer}>
                         <VotesCarousel
-                            navigation={navigation}
+                            navigation={this.props.navigation}
                             screenWidth={SCREEN_WIDTH}
                             screenHeight={SCREEN_HEIGHT}
                             cards={cards}
@@ -152,7 +152,7 @@ class RecentResultsScreen extends React.Component {
                     {id && this.renderShareButton(topVotes)}
                     {id && this.renderAboutButton()}
                 </View>
-                {this.renderContent(id)}
+                {this.renderContent(id, topVotes, cards)}
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={() => this.goToHome()}>
                         <Animatable.Text animation='slideInUp' style={styles.btn}>Voltar</Animatable.Text>

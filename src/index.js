@@ -18,23 +18,27 @@ class HomeScreen extends React.Component {
 
     // Listen to notification interaction
     this.notifTapSubscription = Notifications.addNotificationResponseReceivedListener(response => {
-      const data = response.notification.request.content.data;
-      
-      if (data.type == 'proposal') {
-        this.props.navigation.navigate('RecentProposalsGame', { recentProposals: true, id: data.id });
-      } else if (data.type == 'results') {
-        const screenProps = {
-          id: data.id,
-          votes: data?.votes ?? {},
-          cards: this.props.recentProposalData.length > 0 
-            ? this.props.recentProposalData.find(r => r.id == data.id).cards 
-            : [],
-          navigation: this.props.navigation,
-        };
+      if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
+        const data = response.notification.request.content.data;
         
-        this.props.navigation.navigate('RecentResults', { screenProps });
+        if (data.type == 'proposal') {  // [proposal, results]
+          this.props.navigation.navigate('RecentProposalsGame', { recentProposals: true, id: data.id });
+          return;
+        }
+
+        if (data.type == 'results' && this.props.recentProposalData.length > 0) {
+          const cards = this.props.recentProposalData.find(r => r.id == data.id).cards;
+          const screenProps = {
+            id: data.id,
+            votes: data?.votes ?? {},
+            cards,
+            navigation: this.props.navigation,
+          };
+          
+          this.props.navigation.navigate('RecentResults', { screenProps });
+        }
       }
-    });
+    }); 
   }
 
   componentWillUnmount() {
