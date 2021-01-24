@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
-// import AppScreen from './src';
 import Routes from './src/config/routes';
-import { useScreens } from 'react-native-screens';
-import { createStore } from 'redux';
+import store, { persistor } from './src/store';
 import { Provider } from 'react-redux';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 import handleCustomTransition from './src/config/transitions';
-import Reducers from './src/reducers';
-
-useScreens();
-
-const store = createStore(Reducers);
+import { PersistGate } from 'redux-persist/integration/react';
 
 const AppNavigator = createStackNavigator(
   Routes,
@@ -19,12 +13,15 @@ const AppNavigator = createStackNavigator(
   }
 );
 
-AppContainer = createAppContainer(AppNavigator);
+const AppContainer = createAppContainer(AppNavigator);
+
 export default class App extends Component {
   render() {
     return (      
     <Provider store={store}>
-      <AppContainer></AppContainer>
+      <PersistGate persistor={persistor}>
+        <AppContainer/>
+      </PersistGate>
     </Provider>
     ) 
   }

@@ -7,7 +7,6 @@ const initialState = {
   }
   
 export default appStatusReducer = (state = initialState, action) => {
-  console.log('NETWORK REDUCER ACTION =>', action);
     switch(action.type) {
         case SET_OFFLINE:
             return {

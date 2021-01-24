@@ -37,11 +37,4 @@ export const slides = [
     image: require('../../assets/intro/privacy.png'),
     colors: gradientColors,
   },
-  // {
-  //   key: 'somethun5',
-  //   title: 'Quais partidos votam como tu?',
-  //   text: 'Descobre os partidos que concordam contigo e navega no tempo para explorar notícias na altura da votação. Vê também a biografia dos parlamentares criadores da proposta.',
-  //   image: require('../../assets/intro/news.png'),
-  //   colors: gradientColors,
-  // },
 ];

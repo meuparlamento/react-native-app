@@ -10,10 +10,12 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from 'expo-linear-gradient';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import RF from 'react-native-responsive-fontsize';
+import { withNavigation } from 'react-navigation';
 
 
-export default class MainMenuScreen extends Component {
+class MainMenuScreen extends Component {
     render() {
+      console.log('MainMenu', this.props);
         return (
             <View style={styles.container}>
             <StatusBar barStyle="dark-content" hidden={false} translucent />
@@ -24,6 +26,9 @@ export default class MainMenuScreen extends Component {
             <View style={styles.menuContainer}>
             <TouchableOpacity onPress={() => this.props.navigateTo('CardGame')}>
               <Animatable.Text animation="slideInDown" style={styles.menuItem}>Novo jogo</Animatable.Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigateTo('CardGame', { recentProposals: true })}>
+              <Animatable.Text animation="slideInDown" style={styles.menuItem}>Propostas Recentes</Animatable.Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.navigateTo('Intro')}>
             <Animatable.Text animation="slideInDown" style={styles.menuItem}>Como funciona</Animatable.Text>
@@ -37,6 +42,8 @@ export default class MainMenuScreen extends Component {
         )
     }
 }
+
+export default withNavigation(MainMenuScreen); 
 
 const styles = StyleSheet.create({
     container: {

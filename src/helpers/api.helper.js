@@ -19,13 +19,15 @@ const fetchCardData = async (url) => {
     }
   }
 
-export const getCardsContent = async quantity => {
-  const proposalsUrl = config.api.proposals.url;
+export const getCardsContent = async (quantity, recentProposals = false) => {
+  console.log('getCardsContent: quantity', quantity);
+  const proposalsUrl = config.api.proposals.batch.url;
+  const recentUrl = config.api.proposals.recent.url;
   let cards = [];
   let lastItemPosition = false;
   try {
     // fetch proposals
-    const data = await fetchCardData(`${proposalsUrl}/${quantity}`);
+    const data = recentProposals ? await fetchCardData(`${recentUrl}/${quantity}`) : await fetchCardData(`${proposalsUrl}/${quantity}`);
     cards = data.map(row => {
       const position = new Animated.ValueXY();
       const { BE, CDS_PP, PCP, PEV, PS, PSD, PAN } = row;

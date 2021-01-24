@@ -1,22 +1,53 @@
 import React from 'react';
-import { StyleSheet, AsyncStorage } from 'react-native';
 import Image from 'react-native-remote-svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Notifications from 'expo-notifications';
 
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { registerForPushNotificationsAsync } from './helpers/push-notifications.helper';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import * as actions from './actions';
+import { bindActionCreators } from 'redux';
 import MainMenuScreen from './screens/MainMenuScreen';
 
 class HomeScreen extends React.Component {
+  componentDidMount() {
+    this.loadResourcesAsync();
+
+    // Listen to notification interaction
+    this.notifTapSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+      if (response.actionIdentifier == Notifications.DEFAULT_ACTION_IDENTIFIER) {
+        const data = response.notification.request.content.data;
+        
+        if (data.type == 'proposal') {  // [proposal, results]
+          this.props.navigation.navigate('RecentProposalsGame', { recentProposals: true, id: data.id });
+          return;
+        }
+
+        if (data.type == 'results' && this.props.recentProposalData.length > 0) {
+          const cards = this.props.recentProposalData.find(r => r.id == data.id).cards;
+          const screenProps = {
+            id: data.id,
+            votes: data?.votes ?? {},
+            cards,
+            navigation: this.props.navigation,
+          };
+          
+          this.props.navigation.navigate('RecentResults', { screenProps });
+        }
+      }
+    }); 
+  }
+
+  componentWillUnmount() {
+    this.notifTapSubscription && this.notifTapSubscription.remove();
+  }
+
   componentDidUpdate() {
     const { isAppReady, firstUse, isOffline } = this.props;
     
-    console.log('props from redux', isAppReady, firstUse);
-  
     if(isAppReady && firstUse) {
       this.navigateTo('Intro');
     }
@@ -29,7 +60,6 @@ class HomeScreen extends React.Component {
   loadResourcesAsync = async () => {
     const { setAppFirstUse } = this.props;
     try {
-      // load random cards
       const images = [
         require('./assets/icons8-cancel-128.png'),
         require('./assets/icons8-checkmark-128.png'),
@@ -42,7 +72,6 @@ class HomeScreen extends React.Component {
         require('./assets/logos/PS.png'),
         require('./assets/logos/PSD.png'),
       ];
-      // load custom font
       const imagesPromise = this.cacheImages(images);
       const fontsPromise = Font.loadAsync({
         'AirbnbCerealApp-Black': require('./assets/fonts/AirbnbCerealApp-Black.ttf'),
@@ -54,7 +83,6 @@ class HomeScreen extends React.Component {
       });
       await Promise.all([imagesPromise, fontsPromise]);
       const firstUse = !(await AsyncStorage.getItem('alreadyLaunched'));
-      console.log('new firstUse', firstUse);
       if (firstUse) {
        await registerForPushNotificationsAsync();
       }
@@ -75,9 +103,9 @@ class HomeScreen extends React.Component {
     });
   }
   
-  navigateTo = (screen) => {
+  navigateTo = (screen, params) => {
     const { navigation } = this.props;
-    navigation.navigate(screen);
+    navigation.navigate(screen, params);
   };
 
   render() {
@@ -86,12 +114,11 @@ class HomeScreen extends React.Component {
         <AppLoading
           startAsync={this.loadResourcesAsync}
           onFinish={() => this.props.setAppReady(true)}
+          onError={console.warn}
         />
       );
     } else {
-      return (
-        <MainMenuScreen navigateTo={this.navigateTo}></MainMenuScreen>
-      );
+      return <MainMenuScreen navigateTo={this.navigateTo} />;
     }
   }
 }
@@ -99,6 +126,7 @@ const mapStateToProps = store => ({
   isOffline: store.appStatusReducer.isOffline,
   isAppReady: store.appStatusReducer.isAppReady,
   firstUse: store.appStatusReducer.firstUse,
+  recentProposalData: store.proposalReducer.recentProposalData,
 });
 
 const mapDispatchToProps = dispatch => (
